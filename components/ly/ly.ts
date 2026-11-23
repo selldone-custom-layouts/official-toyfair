@@ -207,6 +207,8 @@ export function wayTitle(tr: any, shop: any): string {
 export function deliveryWays(shop: any): DeliveryWay[] {
   return (shop?.transportations || [])
     .filter((x: any) => x && x.enable !== false)
+    /* Pickup only with a pickup point: without one, checkout never offers it (the Rino fix; Toychi: pickups null) */
+    .filter((x: any) => x.type !== "Pickup" || (Array.isArray(x.pickups) && x.pickups.length > 0))
     .map((x: any) => {
       const free = !!x.free_shipping && !(Number(x.free_shipping_limit) > 0);
       return {

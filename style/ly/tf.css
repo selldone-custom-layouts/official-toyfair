@@ -108,7 +108,7 @@
 .ly .tf-bag { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding-inline: 13px; border-radius: var(--tf-pill); color: inherit; box-shadow: inset 0 0 0 1px var(--tf-brand-line); font-weight: 750; font-size: 13.5px; }
 .ly .tf-bag:hover { background: var(--ly-dark); color: inherit; }
 .tf-bag .i { width: 22px; height: 22px; }
-.tf-bag .count { display: grid; place-items: center; min-width: 23px; height: 23px; padding-inline: 5px; border-radius: var(--tf-pill); background: var(--tf-cream); color: var(--tf-cream-ink); font-size: 12px; font-weight: 800; }
+.ly .tf-bag .count { position: static; display: grid; place-items: center; min-width: 23px; height: 23px; padding-inline: 5px; border-radius: var(--tf-pill); background: var(--tf-cream); color: var(--tf-cream-ink); font-size: 12px; font-weight: 800; }
 
 .tf-nav { position: relative; border-top: 1px solid var(--tf-brand-line); }
 .tf-nav-in { display: flex; align-items: center; gap: 13px; min-height: 46px; }

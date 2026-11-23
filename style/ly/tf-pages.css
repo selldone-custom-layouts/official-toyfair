@@ -181,3 +181,34 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .ly .pt .eyebrow { margin: 12px 0 0; }
 .ly .pt .sample-tag { margin: 12px 0 0; }
 @media (max-width: 600px) { .ly .pt .pt-h, .ly .pt.compact .pt-h { font-size: 34px; } }
+
+/* quiet links in sentence case (the base set them in tracked capitals) */
+.ly .qlink, .ly-layers .qlink, .ly .srch-all { letter-spacing: 0; text-transform: none; font-size: 13.5px; font-weight: 750; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Basket, checkout, order, account: the base's flows in Toy Fair's dress ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* no near-black buttons or chips: the base's "alt" colour is the family's action colour here */
+.ly, .ly-layers { --ly-alt: var(--ly-act); --ly-alt-on: var(--ly-act-on); --ly-alt-deep: var(--ly-act-deep); }
+/* the checkout steps: pills in sentence case, the current one in the action colour */
+.ly .steps { justify-content: flex-start; margin-top: 14px; }
+.ly .step { border-radius: var(--tf-pill); letter-spacing: 0; text-transform: none; font-weight: 750; font-size: 14px; padding-inline: 8px 16px; }
+.ly .step.cur { background: var(--ly-act); color: var(--ly-act-on); }
+.ly .step.cur .st-ic { background: var(--ly-act-on); color: var(--ly-act); }
+/* white bordered panels (the design's .panel) instead of tinted cards; no outlined numerals */
+.ly .co-c { grid-template-columns: minmax(0, 1fr); background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); padding: 22px 26px 24px; }
+.ly .co-c > .numeral { display: none; }
+.ly .co-c .mc { background: var(--ly-paper); }
+.ly .co-h { font-size: 26px; font-weight: 850; letter-spacing: -.035em; }
+.ly .rc { background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); padding: 16px 20px 22px; }
+.ly .rc-h { margin: 0 -6px 14px; padding: 9px 12px; border-radius: var(--ly-r-in); background: var(--ly-band); font-size: 22px; font-weight: 850; letter-spacing: -.03em; }
+.ly .rc .btn { width: 100%; }
+.ly .cr { background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); }
+.ly .cr-pl { background: var(--tf-photo); }
+.ly .cdlv { background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); }
+.ly .cl-k, .ly .pc-c, .ly .cr .pc-c { letter-spacing: .08em; }
+.ly .mc { border-radius: var(--ly-r-in); }
+.ly .mc:has(.rdo:checked) { box-shadow: inset 0 0 0 2px var(--ly-act); }
+/* the account and order pages: panels, pills */
+.ly .acc-nav a[aria-current], .ly .acc-nav .router-link-active { border-radius: var(--tf-pill); }
+/* a basket line on a phone: the line total gets its own column (it ran past the card's edge in the 44px one) */
+@media (max-width: 760px) { .ly .cr { grid-template-columns: 72px minmax(0, 1fr) auto; } .ly .cr-rm { justify-self: end; } }
+.ly .cr-n { font-family: var(--ly-sans); font-weight: 800; font-size: 19px; letter-spacing: -.02em; }
