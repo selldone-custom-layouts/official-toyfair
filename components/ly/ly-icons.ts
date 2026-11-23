@@ -58,6 +58,17 @@ export const ICONS: Record<string, string> = {
   linkedin: "<rect x=\"3.5\" y=\"3.5\" width=\"17\" height=\"17\" rx=\"2.5\"/><path d=\"M8 10.5V16M8 7.6v.3M11.5 16v-5.5M11.5 13c0-1.6 1-2.6 2.4-2.6s2.1 1 2.1 2.6v3\"/>",
   gift: "<rect x=\"4\" y=\"9\" width=\"16\" height=\"11\" rx=\"1.4\"/><path d=\"M3.5 9h17M12 9v11M12 9c-1.5-3.5-5.5-4-5.5-1.5C6.5 9 12 9 12 9zm0 0c1.5-3.5 5.5-4 5.5-1.5C17.5 9 12 9 12 9z\"/>",
   tag: '<path d="M3.8 12.6V4.8a1 1 0 0 1 1-1h7.8l7.6 7.6a1 1 0 0 1 0 1.4l-7.8 7.8a1 1 0 0 1-1.4 0z"/><circle cx="8.3" cy="8.3" r="1.4"/>',
+  /* Toy Fair (the design's own line icons, 24 × 24) */
+  cart: '<path d="M2 4h3l3 11h11l3-8H6m3 13h.01m9 0h.01"/>',
+  truck: '<path d="M1 5h14v12H1zm14 5h4l3 4v3h-7zm-7 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm12 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>',
+  grid: '<path d="M3.5 3.5h7v7h-7zm10 0h7v7h-7zm-10 10h7v7h-7zm10 0h7v7h-7z"/>',
+  message: '<path d="M21 4H3v13h5l4 4v-4h9zM7 9h10m-10 4h6"/>',
+  sparkle: '<path d="M12 2l2.7 7.3L22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7L12 2Z"/>',
+  card: '<path d="M3 5h18v14H3zm0 5h18m-14 5h4"/>',
+  book: '<path d="M4 4h7a3 3 0 0 1 3 3v14a3 3 0 0 0-3-3H4zm10 3a3 3 0 0 1 3-3h3v14h-3a3 3 0 0 0-3 3"/>',
+  sliders: '<path d="M4 6h16M4 12h16M4 18h16M8 4v4m8 2v4m-6 2v4"/>',
+  palette: '<path d="M12 3a9 9 0 0 0 0 18h1.4a2.3 2.3 0 0 0 1.8-3.7 1.5 1.5 0 0 1 1.2-2.4H18a3 3 0 0 0 3-3c0-5-4-8.9-9-8.9Zm-4 7h.01M11 7h.01m4 1h.01m2 3h.01"/>',
+  cal2: '<path d="M4 6h16v14H4zM4 10h16M8 3v5m8-5v5"/>',
 };
 
 export const ART: Record<string, string> = {

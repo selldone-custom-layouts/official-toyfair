@@ -156,25 +156,58 @@ export const SKIN = {
   },
   "home": [
     {
-      "section": "hero",
-      "variant": "split",
+      "section": "tf-hero",
+      "variant": "panel",
       "band": false
     },
     {
-      "section": "collections",
+      "section": "tf-shelf",
+      "variant": "featured",
+      "band": false
+    },
+    {
+      "section": "tf-depts",
+      "variant": "tiles",
+      "band": false
+    },
+    {
+      "section": "tf-shelf",
+      "variant": "favourites",
+      "band": false
+    },
+    {
+      "section": "tf-promos",
+      "variant": "photos",
+      "band": false
+    },
+    {
+      "section": "tf-ages",
+      "variant": "pills",
+      "band": true
+    },
+    {
+      "section": "tf-shelf",
+      "variant": "department",
+      "band": false
+    },
+    {
+      "section": "tf-budget",
+      "variant": "pills",
+      "band": false
+    },
+    {
+      "section": "tf-guides",
       "variant": "cards",
       "band": false
     },
     {
-      "section": "journal",
-      "variant": "photo",
-      "band": true
+      "section": "tf-help",
+      "variant": "rows",
+      "band": false
     }
   ],
   "photoArt": {
-    "hero": "none",
-    "build": "none",
-    "together": "none"
+    "hero": "none"
   },
   "splash": {
     "art": "none"

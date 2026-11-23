@@ -26,6 +26,14 @@ import SelectionSection from "./sections/SelectionSection.vue";
 import PhotoBand from "./sections/PhotoBand.vue";
 import MarqueeSection from "./sections/MarqueeSection.vue";
 import JournalSection from "./sections/JournalSection.vue";
+import TfHero from "../toyfair/home/TfHero.vue";
+import TfShelf from "../toyfair/home/TfShelf.vue";
+import TfDepts from "../toyfair/home/TfDepts.vue";
+import TfPromos from "../toyfair/home/TfPromos.vue";
+import TfAges from "../toyfair/home/TfAges.vue";
+import TfBudget from "../toyfair/home/TfBudget.vue";
+import TfGuides from "../toyfair/home/TfGuides.vue";
+import TfHelpRow from "../toyfair/home/TfHelpRow.vue";
 
 /* section id (sections.json) -> its component; the variant is a prop the component draws */
 const REGISTRY = {
@@ -40,6 +48,14 @@ const REGISTRY = {
   photoband: PhotoBand,
   marquee: MarqueeSection,
   journal: JournalSection,
+  "tf-hero": TfHero,
+  "tf-shelf": TfShelf,
+  "tf-depts": TfDepts,
+  "tf-promos": TfPromos,
+  "tf-ages": TfAges,
+  "tf-budget": TfBudget,
+  "tf-guides": TfGuides,
+  "tf-help": TfHelpRow,
 };
 
 export default {

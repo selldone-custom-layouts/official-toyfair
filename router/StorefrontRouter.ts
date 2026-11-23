@@ -74,6 +74,14 @@ const StorefrontPageBlogsView = () =>
     import( "../pages/blog/view/StorefrontPageBlogsView.vue");
 const StorefrontPageBlogsList = () =>
     import( "../pages/blog/list/StorefrontPageBlogsList.vue");
+/* Toy Fair: the retail service pages (components/ly/toyfair/retail/) */
+const TfGiftFinder = () => import("../components/ly/toyfair/retail/TfGiftFinder.vue");
+const TfPickups = () => import("../components/ly/toyfair/retail/TfPickups.vue");
+const TfTrack = () => import("../components/ly/toyfair/retail/TfTrack.vue");
+const TfRegister = () => import("../components/ly/toyfair/retail/TfRegister.vue");
+const TfHelp = () => import("../components/ly/toyfair/retail/TfHelp.vue");
+const TfService = () => import("../components/ly/toyfair/retail/TfService.vue");
+
 const StorefrontPageFaq = () =>
     import("@app-storefront/pages/faq/StorefrontPageFaq.vue");
 const StorefrontPageOfficialContactUs = () =>
@@ -702,6 +710,22 @@ const routes: IVueRoute[] = [
           },
         ],
       },
+
+      // ⬬⬬⬬⬬⬬⬬⬬⬬ Toy Fair: retail service pages ⬬⬬⬬⬬⬬⬬⬬⬬
+      { path: "gift-finder", name: "TfGiftFinder", component: TfGiftFinder },
+      { path: "pickup-points", name: "TfPickupFinder", component: TfPickups },
+      { path: "pickup-points/:point_id", name: "TfPickupPoint", component: TfPickups },
+      { path: "track-order", name: "TfTrackOrder", component: TfTrack },
+      { path: "register", name: "TfRegister", component: TfRegister },
+      { path: "help", name: "TfHelp", component: TfHelp },
+      { path: "help/delivery", name: "TfDelivery", component: TfService, meta: { tf: "delivery" } },
+      { path: "help/pickup", name: "TfCollect", component: TfService, meta: { tf: "collect" } },
+      { path: "help/returns", name: "TfReturns", component: TfService, meta: { tf: "returns" } },
+      { path: "help/stock", name: "TfStock", component: TfService, meta: { tf: "stock" } },
+      { path: "help/pre-orders", name: "TfPreorders", component: TfService, meta: { tf: "preorder" } },
+      { path: "help/gift-cards", name: "TfGiftCards", component: TfService, meta: { tf: "giftcards" } },
+      { path: "help/payment", name: "TfPayment", component: TfService, meta: { tf: "payment" } },
+      { path: "help/product-notices", name: "TfNotices", component: TfService, meta: { tf: "notices" } },
 
       // ⬬⬬⬬⬬⬬⬬⬬⬬ FAQ ⬬⬬⬬⬬⬬⬬⬬⬬
       {

@@ -1,15 +1,14 @@
 <!--
-  The product card (design/src/shell.js card(); set A): an open card (no box) with a
-  tinted plate (a fixed square, the cut-out contained), the near-black −25% roundel and the quick-view
-  disc in the plate's top corners (no words there); then, left-aligned, the collection, the name (two
-  lines), "Per <unit>" (and "only n left" when five or fewer), the price with the struck was-price and
-  the saving, and "Add to bag", which turns into − n + in place (LyAdd). The roundel's words always fit
-  their circle (fit-in-circle).
+  Toy Fair: the product card (design toy-fair, shared/toy-fair.js fairCard()): a bordered card; the photo on a white
+  plate in a fixed box (the cut-out contained), the save heart in its top corner; "Save n%" only while the product's
+  own discount window is open; the name (two lines), the price with its cents raised and the was-price struck; the
+  age from the product's own specification; real ratings only (none: no line); then "Add", which turns into
+  − n in basket + in place (LyAdd), and the quick view. Nothing names a product, price or age: all live.
 -->
 <template>
-  <article :class="['pc', cls]" :style="delay != null ? { '--d': delay + 'ms' } : null">
-    <div class="pc-plate">
-      <router-link :to="to" aria-hidden="true" class="pc-ph" tabindex="-1">
+  <article :class="['pc', 'tf-card', cls]" :style="delay != null ? { '--d': delay + 'ms' } : null">
+    <div class="tf-pic">
+      <router-link :to="to" aria-hidden="true" class="tf-ph" tabindex="-1">
         <img
           :loading="eager ? 'eager' : 'lazy'"
           :src="img"
@@ -18,29 +17,41 @@
           decoding="async"
           draggable="false"
           height="640"
-          sizes="(max-width: 760px) 40vw, 200px"
+          sizes="(max-width: 600px) 46vw, (max-width: 1100px) 30vw, 300px"
           width="640"
           @error="dropSrcset"
         />
       </router-link>
-      <span v-if="pv.off > 0" ref="off" :aria-label="t('ly.card.offAria', '{off} percent off', { off: pv.off })" class="pc-off"><span dir="ltr">−{{ pv.off }}%</span></span>
-      <button :aria-label="t('ly.card.quick', 'Quick view: {name}', { name: product.title })" aria-controls="qv" class="pc-qv" type="button" @click="quick($event)">
-        <ly-icon name="eye" />
+      <button
+        :aria-label="isSaved ? t('tf.card.unsave', 'Remove {name} from saved toys', { name: product.title }) : t('tf.card.save', 'Save {name}', { name: product.title })"
+        :aria-pressed="isSaved ? 'true' : 'false'"
+        :title="isSaved ? t('tf.card.saved', 'Saved') : t('tf.card.saveShort', 'Save')"
+        class="tf-heart"
+        type="button"
+        @click.prevent.stop="save"
+      >
+        <ly-icon name="heart" />
       </button>
     </div>
-    <div class="pc-tx">
-      <p v-if="!noCat && catName" class="pc-c"><bdi>{{ catName }}</bdi></p>
+    <div class="tf-info">
+      <span v-if="pv.off > 0" class="tf-deal">{{ t("tf.card.saveOff", "Save {off}%", { off: pv.off }) }}</span>
       <h3 class="pc-t">
         <router-link :to="to">{{ product.title }}</router-link>
       </h3>
-      <p class="pc-u">
-        {{ t("ly.card.per", "Per {unit}", { unit }) }}<template v-if="low">{{ " · " }}<span class="low">{{ t("ly.card.onlyLeft", "only {n} left", { n: product.quantity }) }}</span></template>
+      <p class="tf-price">
+        <tf-money :amount="pv.now" class="now" /><template v-if="pv.was">{{ " " }}<s class="was money">{{ money(pv.was) }}</s></template>
       </p>
-      <p class="pc-ly">
-        <span class="now money">{{ money(pv.now) }}</span><template v-if="pv.was">{{ " " }}<s class="was money">{{ money(pv.was) }}</s></template
-        ><span v-if="pv.save > 0" class="pc-sv">{{ t("ly.card.save", "Save {amount}", { amount: money(pv.save) }) }}</span>
+      <p v-if="rated" class="tf-rate">
+        <ly-icon name="star" /><b>{{ rate }}</b><span>({{ product.rate_count }})</span>
       </p>
-      <div class="pc-add"><ly-add :product="product" /></div>
+      <p v-if="age" class="tf-age">{{ age }}</p>
+      <p v-else-if="!noCat && catName" class="tf-age"><bdi>{{ catName }}</bdi></p>
+    </div>
+    <div class="tf-buy pc-add">
+      <ly-add :label="t('tf.card.add', 'Add')" :product="product" icon="cart" say />
+      <button :aria-label="t('ly.card.quick', 'Quick view: {name}', { name: product.title })" aria-controls="qv" class="tf-qv" type="button" @click="quick($event)">
+        <ly-icon name="search" />
+      </button>
     </div>
   </article>
 </template>
@@ -48,16 +59,17 @@
 <script>
 import LyIcon from "../LyIcon.vue";
 import LyAdd from "../LyAdd.vue";
-import { catOf, catTitle, money, openQuick, priceView, productImage, productTo, unitOf } from "../ly";
+import TfMoney from "../toyfair/TfMoney.vue";
+import { catOf, catTitle, money, openQuick, priceView, productImage, productTo } from "../ly";
 import { dropSrcset, productSrcset } from "../../kalio/kalio-catalog";
 import { currentCurrency } from "../../region-switcher/region";
-import { fitInCircle } from "../../bakini/fit-in-circle";
-import { fitOnResize } from "../ly-fit";
+import { saved, toggleSaved } from "../../bakini/bakini";
+import { ageOf } from "../toyfair/tf";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 export default {
   name: "LyCard",
-  components: { LyIcon, LyAdd },
+  components: { LyIcon, LyAdd, TfMoney },
   props: {
     product: { type: Object, required: true },
     noCat: Boolean,
@@ -65,6 +77,7 @@ export default {
     cls: { type: [String, Array, Object], default: "" },
     delay: { type: Number, default: null },
   },
+  data: () => ({ saved }),
   computed: {
     shop() {
       return this.$store.getters.getShop;
@@ -82,29 +95,21 @@ export default {
     srcset() {
       return productSrcset(this.product);
     },
-    unit() {
-      return unitOf(this.product);
-    },
-    low() {
-      const q = Number(this.product.quantity);
-      return q > 0 && q <= 5;
+    age() {
+      return ageOf(this.product);
     },
     catName() {
       return catTitle(catOf(this.product.category_id));
     },
-  },
-  watch: {
-    "pv.off"() {
-      this.$nextTick(() => fitInCircle(this.$refs.off));
+    rated() {
+      return Number(this.product.rate_count) > 0 && Number(this.product.rate) > 0;
     },
-  },
-  beforeUnmount() {
-    this.unfit?.();
-  },
-  mounted() {
-    this.unfit = fitOnResize(() => fitInCircle(this.$refs.off));
-    this.$nextTick(() => fitInCircle(this.$refs.off));
-    document.fonts?.ready?.then(() => fitInCircle(this.$refs.off));
+    rate() {
+      return (Math.round(Number(this.product.rate) * 10) / 10).toFixed(1);
+    },
+    isSaved() {
+      return this.saved[this.product.id] ?? !!this.product.wishlist;
+    },
   },
   methods: {
     t,
@@ -112,6 +117,9 @@ export default {
     dropSrcset,
     quick(e) {
       openQuick(this.product, e.currentTarget);
+    },
+    save() {
+      toggleSaved(this, this.product);
     },
   },
 };

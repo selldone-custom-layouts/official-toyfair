@@ -19,13 +19,13 @@
     type="button"
     @click.prevent.stop="add()"
   >
-    {{ label || t("ly.add.add", "Add to bag") }}
+    <ly-icon v-if="icon" :name="icon" />{{ label || t("ly.add.add", "Add to bag") }}
   </button>
   <div v-else :aria-label="t('ly.add.inBag', '{name} in bag', { name: product.title })" class="qb" role="group">
     <button :aria-label="t('ly.add.less', 'Remove one {name}', { name: product.title })" type="button" @click.prevent.stop="step(-1)">
       <ly-icon name="minus" />
     </button>
-    <span aria-live="polite" class="qn">{{ q }}</span>
+    <span aria-live="polite" class="qn">{{ q }}<span v-if="say" class="qn-w">{{ " " + t("tf.add.inBasket", "in basket") }}</span></span>
     <button
       ref="plus"
       :aria-disabled="full ? 'true' : undefined"
@@ -52,6 +52,9 @@ export default {
     product: { type: Object, required: true },
     label: { type: String, default: "" },
     alt: { type: Boolean, default: false },
+    /* Toy Fair: an icon before the label, and "n in basket" in the box (hidden on a narrow card) */
+    icon: { type: String, default: "" },
+    say: { type: Boolean, default: false },
   },
   computed: {
     q() {

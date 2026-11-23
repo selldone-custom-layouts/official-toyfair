@@ -125,17 +125,45 @@
   },
   "home": [
     {
-      "section": "hero",
-      "variant": "split"
+      "section": "tf-hero",
+      "variant": "panel"
     },
     {
-      "section": "collections",
+      "section": "tf-shelf",
+      "variant": "featured"
+    },
+    {
+      "section": "tf-depts",
+      "variant": "tiles"
+    },
+    {
+      "section": "tf-shelf",
+      "variant": "favourites"
+    },
+    {
+      "section": "tf-promos",
+      "variant": "photos"
+    },
+    {
+      "section": "tf-ages",
+      "variant": "pills",
+      "band": true
+    },
+    {
+      "section": "tf-shelf",
+      "variant": "department"
+    },
+    {
+      "section": "tf-budget",
+      "variant": "pills"
+    },
+    {
+      "section": "tf-guides",
       "variant": "cards"
     },
     {
-      "section": "journal",
-      "variant": "photo",
-      "band": true
+      "section": "tf-help",
+      "variant": "rows"
     }
   ],
   "photos": {
@@ -146,22 +174,6 @@
       ],
       "art": "none",
       "note": "two children playing with magnetic tiles and a track in a bright playroom; beside the hero's words, never under them"
-    },
-    "build": {
-      "size": [
-        1040,
-        780
-      ],
-      "art": "none",
-      "note": "children building with magnetic tiles; the first photo promo and the gift finder"
-    },
-    "together": {
-      "size": [
-        1040,
-        780
-      ],
-      "art": "none",
-      "note": "a family playing a board game at a table; the second photo promo and the journal's lead"
     },
     "collections": {
       "size": [
