@@ -1,0 +1,29 @@
+{
+  "name": "Toy Fair Superstore",
+  "shop": "Toychi",
+  "kind": "Toys · single shop",
+  "summary": "A toy superstore: brand-coloured header with departments and search, a soft hero, featured toys on a dark band, picture department tiles, shop by age and budget, a filter drawer from the real specification, a product page with a sticky buy box, the whole checkout and retail help pages from live settings.",
+  "live": "https://toyfair.selldone.shop",
+  "cover": "docs/screenshots/cover.jpg",
+  "screenshots": [
+    "docs/screenshots/desktop-home.jpg",
+    "docs/screenshots/desktop-category.jpg",
+    "docs/screenshots/desktop-product.jpg",
+    "docs/screenshots/desktop-cart.jpg",
+    "docs/screenshots/phone-home.jpg",
+    "docs/screenshots/phone-category.jpg",
+    "docs/screenshots/phone-product.jpg",
+    "docs/screenshots/phone-cart.jpg"
+  ],
+  "tags": [
+    "toys",
+    "kids",
+    "superstore",
+    "single-vendor",
+    "light",
+    "rtl"
+  ],
+  "package": "toy-fair-superstore",
+  "base": "selldone/storefront",
+  "status": "draft"
+}

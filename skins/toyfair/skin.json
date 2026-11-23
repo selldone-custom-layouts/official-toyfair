@@ -1,0 +1,185 @@
+{
+  "$schema": "../../skin.schema.json",
+  "name": "toyfair",
+  "package": "toy-fair-superstore",
+  "title": "Toy Fair Superstore",
+  "description": "A bright, busy toy superstore Layout in the manner of a big family retailer. A dark top strip, a brand-coloured header with account and order tracking links, a wide search bar, saved toys and the basket, a row of department links with a Departments menu and a gift finder, and a strip of delivery, pickup and help links. The home: a soft panel hero with big words beside a playroom photo, featured toys on the family-dark band, departments as picture tiles from the shop's own category images, shelves of toys, two photo promos, shop by age and by budget from the products' real specification and prices, play guides from the shop's blog and help links. A department page with a title panel, department chips, a filter drawer built from the toys' real specification and a four-column grid; a product page with side thumbnails, a sticky buy box with delivery and pickup choices read from the shop's own settings, key features, details and the specification in the shop's own groups; compare side by side; a basket drawer and the whole checkout; retail service pages (gift finder, pickup points, order tracking, help centre, delivery, pickup, returns, stock, pre-orders, gift cards, payment options, product notices) built from the shop's live delivery, pickup and payment settings, with an honest empty state where the shop has none. One colour family from the chosen palette (Lagoon by default; Coral, Bluebell, Amber or any colour), light by default with a dark mode, DM Sans throughout, 12 px panels and pill buttons. English and Arabic.",
+  "summary": "A toy superstore: brand-coloured header with departments and search, a soft hero, featured toys on a dark band, picture department tiles, shop by age and budget, a filter drawer from the real specification, a product page with a sticky buy box, the whole checkout and retail help pages from live settings.",
+  "tagline": "Toys, games and gifts for every age.",
+  "kind": "Toys · single shop",
+  "tags": [
+    "toys",
+    "kids",
+    "superstore",
+    "single-vendor",
+    "light",
+    "rtl"
+  ],
+  "shop": {
+    "name": "Toychi",
+    "id": 16144,
+    "xapi": "toychi-KX4iQgu0",
+    "domain": "toyfair.selldone.shop",
+    "currency": "USD",
+    "country": "US",
+    "language": "en"
+  },
+  "github": {
+    "org": "selldone-custom-layouts",
+    "repo": "official-toyfair",
+    "topics": [
+      "selldone",
+      "selldone-layout",
+      "storefront",
+      "vue",
+      "toys",
+      "kids"
+    ]
+  },
+  "dev": {
+    "port": 9178
+  },
+  "checks": {
+    "product": "741339",
+    "product2": "741344",
+    "category": "/cars-trains-vehicles-category",
+    "search": "rover",
+    "article": "",
+    "compare": "p741339_p741344_p741313",
+    "i18nIgnore": ""
+  },
+  "palettes": {
+    "brand": "lagoon",
+    "mode": "light",
+    "list": [
+      {
+        "id": "lagoon",
+        "name": "Lagoon",
+        "seed": "#087865"
+      },
+      {
+        "id": "coral",
+        "name": "Coral",
+        "seed": "#a4404a"
+      },
+      {
+        "id": "bluebell",
+        "name": "Bluebell",
+        "seed": "#3a59a7"
+      },
+      {
+        "id": "amber",
+        "name": "Amber",
+        "seed": "#855614"
+      }
+    ],
+    "showcaseShops": [
+      {
+        "id": 15740,
+        "name": "bakio"
+      },
+      {
+        "id": 15549,
+        "name": "digini-hzgablru"
+      },
+      {
+        "id": 15645,
+        "name": "molino"
+      },
+      {
+        "id": 16144,
+        "name": "toychi"
+      }
+    ]
+  },
+  "fonts": {
+    "display": {
+      "family": "DM Sans",
+      "google": "DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900",
+      "stack": "\"DM Sans\", \"Noto Sans Arabic\", \"Segoe UI\", system-ui, sans-serif"
+    },
+    "text": {
+      "family": "DM Sans",
+      "google": "DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900",
+      "stack": "\"DM Sans\", \"Noto Sans Arabic\", \"Segoe UI\", system-ui, sans-serif"
+    },
+    "headingWeight": 800
+  },
+  "shape": {
+    "panel": 12,
+    "inner": 8
+  },
+  "wordmark": {
+    "case": "lower",
+    "italic": false,
+    "dot": true,
+    "sub": "none",
+    "font": "display",
+    "weight": 850,
+    "tracking": "-.075em",
+    "size": 40
+  },
+  "basket": {
+    "one": "basket",
+    "many": "baskets"
+  },
+  "home": [
+    {
+      "section": "hero",
+      "variant": "split"
+    },
+    {
+      "section": "collections",
+      "variant": "cards"
+    },
+    {
+      "section": "journal",
+      "variant": "photo",
+      "band": true
+    }
+  ],
+  "photos": {
+    "hero": {
+      "size": [
+        1440,
+        960
+      ],
+      "art": "none",
+      "note": "two children playing with magnetic tiles and a track in a bright playroom; beside the hero's words, never under them"
+    },
+    "build": {
+      "size": [
+        1040,
+        780
+      ],
+      "art": "none",
+      "note": "children building with magnetic tiles; the first photo promo and the gift finder"
+    },
+    "together": {
+      "size": [
+        1040,
+        780
+      ],
+      "art": "none",
+      "note": "a family playing a board game at a table; the second photo promo and the journal's lead"
+    },
+    "collections": {
+      "size": [
+        1040,
+        780
+      ],
+      "pattern": "col-<slug of the collection title>"
+    }
+  },
+  "loading": {
+    "art": "none"
+  },
+  "splash": {
+    "art": "none"
+  },
+  "photoCredit": "The photos were generated with Magnific (Freepik) for Toychi under the owner's plan.",
+  "words": {
+    "en": {},
+    "ar": {}
+  }
+}
