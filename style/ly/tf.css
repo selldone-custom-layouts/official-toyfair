@@ -126,7 +126,7 @@
 .tf-dd.open { display: block; }
 .tf-dd-in { padding-block: 18px 22px; }
 .tf-dd-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.tf-dd-h .dd-h { font-size: 18px; font-weight: 850; letter-spacing: -.02em; color: var(--ly-ink); text-transform: none; }
+.ly .tf-dd-h .dd-h { margin: 0; font-size: 18px; font-weight: 850; letter-spacing: -.02em; color: var(--ly-ink); text-transform: none; }
 .tf-dd-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px; }
 .tf-dd-list a { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 12px; padding: 6px; border-radius: var(--ly-r-in); color: var(--ly-ink); }
 .tf-dd-list a:hover { background: var(--ly-act-soft); color: var(--ly-ink); }
@@ -354,3 +354,11 @@
   --bk-r-xl: var(--ly-r-pn); --bk-r-lg: var(--ly-r-pn); --bk-r-md: var(--ly-r-pn); --bk-r-sm: var(--ly-r-in);
 }
 .s--storefront-layout > main, .s--storefront-layout .v-main { background: var(--ly-bg); }
+
+/* the Departments panel runs the header's width (the base's .dd is a small dropdown) */
+.ly .tf-hdr .dd.tf-dd { position: absolute; left: 0; right: 0; inset-inline: 0; top: 100%; width: auto; max-width: none; transform: none; margin: 0; padding: 0; border-radius: 0 0 var(--ly-r-pn) var(--ly-r-pn); opacity: 1; visibility: visible; display: none; }
+.ly .tf-hdr .dd.tf-dd.open { display: block; }
+.ly-layers .tf-menu-rg span:not(.pn-rg-v) { white-space: nowrap; font-size: 15px; }
+.ly-layers .tf-menu-rg .pn-rg-v { white-space: nowrap; font-size: 13px; }
+.ly .tf-dd-list .dd-tx b { font-family: var(--ly-sans); font-weight: 750; font-size: 14px; line-height: 1.25; letter-spacing: 0; }
+.ly .tf-dd-list .dd-tx small { font-size: 12.5px; color: var(--ly-muted); }
