@@ -25,19 +25,32 @@
 -->
 <template>
   <div class="ly ly-listing">
-    <!-- The title band -->
-    <ly-pt v-if="kind === 'search'" :crumbs="[{ label: t('ly.ls.search', 'Search') }]" :title="search ? t('ly.ls.resultsFor', 'Results for “{q}”', { q: search }) : t('ly.ls.search', 'Search')" art="cupcake" art2="cookie" cls="compact">
-      <form class="pt-srch" role="search" @submit.prevent="submitSearch">
-        <label class="sr" for="ly-sq">{{ t("ly.ls.searchLabel", "Search the bakery") }}</label>
-        <ly-icon name="search" />
-        <input id="ly-sq" :placeholder="searchPh" :value="q" autocomplete="off" enterkeyhint="search" type="search" @input="q = $event.target.value" />
-        <button class="btn sm" type="submit">{{ t("ly.ls.searchBtn", "Search") }}</button>
-      </form>
-    </ly-pt>
-    <ly-pt v-else-if="kind === 'category'" :crumbs="[{ label: catTitle(cat) || categoryName }]" :cuts="catPhoto ? [] : catCuts" :eyebrow="t('ly.ls.theCollection', 'The collection')" :lead="catLead" :photo="catPhoto" :title="catTitle(cat) || ''" cls="compact" />
-    <ly-pt v-else-if="kind === 'deals'" :crumbs="[{ label: t('ly.ls.deals', 'Deals') }]" :lead="dealsLead" :title="t('ly.ls.deals', 'Deals')" art="macaron" art2="cake" cls="compact" />
-    <ly-pt v-else-if="brandQ" :crumbs="[{ label: brandQ }]" :eyebrow="t('ly.ls.theBrand', 'The brand')" :lead="brandLead" :title="brandQ" art="croissant" art2="macaron" cls="compact" />
-    <ly-pt v-else :crumbs="[{ label: t('ly.ls.all', 'Every pastry') }]" :lead="allLead" :title="t('ly.ls.all', 'Every pastry')" art="croissant" art2="macaron" cls="compact" />
+    <!-- Toy Fair: the breadcrumb and the catalogue lead (a soft panel: the department's own image, its name and line) -->
+    <div class="wrap tf-cat-head">
+      <nav :aria-label="t('ly.pt.crumbs', 'Breadcrumb')" class="crumbs tf-crumbs">
+        <ol>
+          <li><router-link :to="{ path: '/' }">{{ t("ly.pt.home", "Home") }}</router-link></li>
+          <li v-if="kind !== 'all' || brandQ"><router-link :to="allTo">{{ t("tf.ls.allToys", "All toys") }}</router-link></li>
+          <li><span aria-current="page"><bdi>{{ headTitle }}</bdi></span></li>
+        </ol>
+      </nav>
+      <header class="tf-lead">
+        <div v-if="kind === 'category' && leadImg" class="tf-lead-art"><img :src="leadImg" alt="" /></div>
+        <div class="tf-lead-tx">
+          <h1><bdi>{{ headTitle }}</bdi></h1>
+          <p v-if="headLead">{{ headLead }}</p>
+          <form v-if="kind === 'search'" class="tf-lead-srch" role="search" @submit.prevent="submitSearch">
+            <label class="sr" for="ly-sq">{{ t("ly.ls.searchLabel", "Search the toys") }}</label>
+            <input id="ly-sq" :placeholder="searchPh" :value="q" autocomplete="off" enterkeyhint="search" type="search" @input="q = $event.target.value" />
+            <button :aria-label="t('ly.ls.searchBtn', 'Search')" class="tf-sgo" type="submit"><ly-icon name="search" /></button>
+          </form>
+        </div>
+      </header>
+      <nav v-if="kind === 'category' || (kind === 'all' && !brandQ)" :aria-label="t('ly.ls.collections', 'Collections')" class="tf-chips">
+        <router-link :aria-current="kind === 'all' ? 'page' : undefined" :to="allTo" class="tf-chip">{{ t("tf.ls.allToys", "All toys") }}</router-link>
+        <router-link v-for="c in ly.cats" :key="c.id" :aria-current="cat && c.id === cat.id ? 'page' : undefined" :to="catTo(c)" class="tf-chip"><bdi>{{ catTitle(c) }}</bdi></router-link>
+      </nav>
+    </div>
 
     <section :aria-label="sectionLabel" class="sec-s">
       <div class="wrap">
@@ -58,8 +71,8 @@
         </template>
 
         <template v-else>
-          <!-- A collection: every collection as a chip -->
-          <nav v-if="kind === 'category'" :aria-label="t('ly.ls.collections', 'Collections')" class="cchips">
+          <!-- (Toy Fair: the department chips sit under the lead) -->
+          <nav v-if="false" :aria-label="t('ly.ls.collections', 'Collections')" class="cchips">
             <ul>
               <li v-for="c in ly.cats" :key="c.id">
                 <router-link :aria-current="cat && c.id === cat.id ? 'page' : undefined" :to="catTo(c)" class="cchip"
@@ -81,7 +94,25 @@
             <span ref="dtsv" class="dt-sv"><span>{{ t("ly.ls.saveCap", "Save") }}</span><b>{{ breakable(money(pv(topSave).save)) }}</b></span>
           </router-link>
 
-          <div :class="['lst', { 'has-fp': filters }]">
+          <div v-if="kind === 'deals' && ready && !base.length" class="tf-nodeals">
+            <div class="tf-nodeals-say">
+              <span class="tf-sym"><ly-icon name="tag" /></span>
+              <div>
+                <h2>{{ t("tf.ls.noDealsT", "No offers right now") }}</h2>
+                <p>{{ t("tf.ls.noDealsP", "Offers show here while they run. Until then, here are good finds at friendly prices.") }}</p>
+              </div>
+            </div>
+            <template v-if="goodFinds.items.length">
+              <div class="tf-top">
+                <h2>{{ t("tf.ls.goodFinds", "Good finds under {price}", { price: money(goodFinds.max, true) }) }}</h2>
+                <router-link :to="underAll(goodFinds.max)" class="tf-more">{{ t("tf.ls.seeAllUnder", "See them all") }}<ly-icon name="arrow" /></router-link>
+              </div>
+              <div class="grid tf-grid">
+                <ly-card v-for="p in goodFinds.items" :key="p.id" :product="p" />
+              </div>
+            </template>
+          </div>
+          <div v-else :class="['lst', { 'has-fp': filters }]">
             <div v-if="tabCats.length > 1" :aria-label="t('ly.ls.collections', 'Collections')" class="tabs" role="group">
               <button :aria-pressed="tab === 'all' ? 'true' : 'false'" class="tab" type="button" @click="setTab('all')">{{ t("ly.ls.allTab", "All") }}</button>
               <button v-for="c in tabCats" :key="c.id" :aria-pressed="tab === c.id ? 'true' : 'false'" class="tab" type="button" @click="setTab(c.id)">
@@ -155,9 +186,10 @@
               </teleport>
 
               <div class="lst-main">
-                <div class="lst-bar">
+                <div class="lst-bar tf-bar">
+                  <p v-if="ready" class="tf-count" aria-live="polite">{{ t("tf.ls.count", { one: "{n} toy", other: "{n} toys" }, { n: shown.length }) }}</p>
                   <button v-if="filters" :aria-controls="fpId" :aria-expanded="layer.open === fpId ? 'true' : 'false'" class="btn quiet sm fbtn" type="button" @click="toggleLayer(fpId, $event.currentTarget)">
-                    <ly-icon name="filter" />{{ t("ly.ls.filterBtn", "Filter") }}<span v-if="active.length" class="fcount">{{ active.length }}</span>
+                    <ly-icon name="sliders" />{{ t("tf.ls.filters", "Filters") }}<span v-if="active.length" class="fcount">{{ active.length }}</span>
                   </button>
                   <div class="actf">
                     <button v-for="a in active" :key="a.id" :aria-label="t('ly.ls.removeFilter', 'Remove filter {name}', { name: a.label })" class="chip on" type="button" @click="a.clear()">
@@ -166,7 +198,7 @@
                   </div>
                   <div ref="sortw" class="sortw">
                     <button :aria-controls="'sm-' + id" :aria-expanded="sortOpen ? 'true' : 'false'" class="sort-btn" type="button" @click="sortOpen = !sortOpen">
-                      <ly-icon name="sort" /><span class="sb-l">{{ t("ly.ls.sortBy", "Sort:") }}</span><span class="sb-v">{{ sortLabel }}</span><ly-icon cls="chev" name="down" />
+                      <span class="sb-l">{{ t("tf.ls.sort", "Sort") }}</span><span class="sb-v">{{ sortLabel }}</span><ly-icon cls="chev" name="down" />
                     </button>
                     <ul :id="'sm-' + id" :aria-label="t('ly.ls.sort', 'Sort')" :class="['sortm', { open: sortOpen }]" role="listbox">
                       <li v-for="s in sorts" :key="s[0]">
@@ -176,13 +208,13 @@
                   </div>
                 </div>
                 <p :class="['upd', { on: busy }]" aria-live="polite"><span aria-hidden="true" class="spin"></span>{{ t("ly.ls.updating", "Updating results…") }}</p>
-                <div v-if="!ready" class="grid">
-                  <div v-for="i in 10" :key="i" aria-hidden="true" class="pc ly-skel"><div class="pc-plate"></div><div class="pc-tx"><span class="sk-l"></span><span class="sk-l s"></span></div></div>
+                <div v-if="!ready" class="grid tf-grid">
+                  <div v-for="i in 8" :key="i" aria-hidden="true" class="pc tf-card ly-skel"><div class="tf-ph pc-plate"></div><div class="tf-info pc-tx"><span class="sk-l"></span><span class="sk-l s"></span></div></div>
                 </div>
-                <div v-else ref="grid" :class="['grid', { dim: busy }]" :data-n="shown.length" :style="fitStyle">
+                <div v-else ref="grid" :class="['grid', 'tf-grid', { dim: busy }]" :data-n="shown.length" :style="fitStyle">
                   <ly-card v-for="(p, i) in shown" :key="p.id + ':' + drawn" :cls="animate ? 'fu' : ''" :delay="animate ? Math.min(i, 12) * 25 : null" :no-cat="kind === 'category'" :product="p" />
                 </div>
-                <ly-empty v-if="ready && !shown.length" :text="t('ly.ls.noneP', 'Widen the price range or clear a filter to see more of the collection.')" :title="t('ly.ls.noneT', 'No pastries match these filters')" icon="search">
+                <ly-empty v-if="ready && !shown.length" :text="t('ly.ls.noneP', 'Widen the price range or clear a filter to see more of the collection.')" :title="t('tf.ls.noneT', 'No toys match these filters')" icon="search">
                   <template #acts>
                     <button class="btn sm" type="button" @click="reset">{{ t("ly.ls.clearFilters", "Clear filters") }}</button>
                   </template>
@@ -208,7 +240,7 @@
     </section>
 
     <!-- A collection ends with the strip: the courier, the collection's photo, pickup. -->
-    <ly-strip v-if="kind === 'category' && cat" :cat="cat" />
+
   </div>
 </template>
 
@@ -218,7 +250,7 @@ import LyPt from "../ui/LyPt.vue";
 import LyEmpty from "../ui/LyEmpty.vue";
 import LyCard from "../ui/LyCard.vue";
 import LyStrip from "./LyStrip.vue";
-import { bySells, catOf, catTitle, catTo, closeLayer, ly, fmtDate, inCat, layer, loadDm, money, priceView, productImage, productTo, specGroups, specValue, toggleLayer } from "../ly";
+import { bySells, catImage, catOf, catTitle, catTo, closeLayer, ly, fmtDate, inCat, layer, loadDm, money, priceView, productImage, productTo, specGroups, specValue, toggleLayer } from "../ly";
 import { percentOff } from "../../kalio/kalio-catalog";
 import { journalPage, postRoute } from "../../kalio/pages/kalio-journal";
 import { currentCurrency, isRtl, regionState, signOf } from "../../region-switcher/region";
@@ -296,7 +328,42 @@ export default {
       return "all";
     },
     filters() {
-      return this.kind === "category";
+      return this.kind !== "search" || this.base.length > 0;
+    },
+    allTo() {
+      return { name: window.$storefront.routes.SHOP_PAGE };
+    },
+    headTitle() {
+      if (this.kind === "category") return catTitle(this.cat) || "";
+      if (this.kind === "search") return this.search ? t("ly.ls.resultsFor", "Results for “{q}”", { q: this.search }) : t("ly.ls.search", "Search");
+      if (this.kind === "deals") return t("tf.ls.offers", "Offers");
+      if (this.brandQ) return this.brandQ;
+      return t("tf.ls.allToys", "All toys");
+    },
+    headLead() {
+      if (this.kind === "category") return this.catLead || t("tf.ls.catLead", "Find a toy for their next adventure.");
+      if (this.kind === "deals") return this.offLine ? this.dealsLead : t("tf.ls.dealsNone", "Toys on offer, while the offer runs.");
+      if (this.kind === "search") return "";
+      if (this.brandQ) return this.brandLead;
+      return t("tf.ls.allLead", "Toys, games and gifts for every age.");
+    },
+    leadImg() {
+      const c = this.cat;
+      if (!c) return "";
+      const own = catImage(c, 256);
+      if (own) return own;
+      const top = bySells(inCat(c.id))[0];
+      return top ? productImage(top, null) : "";
+    },
+    /* "Good finds under $50": the cheapest round amount that holds at least four toys in stock, from the live prices */
+    goodFinds() {
+      void this.currency;
+      const pool = this.ly.products.filter((p) => p.quantity !== 0).map((p) => ({ p, now: this.pv(p).now })).sort((a, b) => a.now - b.now || a.p.id - b.p.id);
+      if (!pool.length) return { max: 0, items: [] };
+      const steps = [10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 300, 500, 1000, 2000, 5000];
+      const enough = Math.min(4, pool.length);
+      const max = steps.find((m) => pool.filter((x) => x.now <= m).length >= enough) || Math.ceil(pool[enough - 1].now);
+      return { max, items: bySells(pool.filter((x) => x.now <= max).map((x) => x.p)).slice(0, 8) };
     },
     cat() {
       return this.ly.cats.find((c) => c.name === this.categoryName) || null;
@@ -489,6 +556,7 @@ export default {
         this.resetRange();
         this.snapshot = null;
         if (this.ready && (this.kind !== "category" || this.cat)) this.$emit("fetched", { parent: this.cat || null, products: list });
+        if (this.ready) this.specFromRoute();
         this.$nextTick(() => this.fit());
       },
       immediate: true,
@@ -499,6 +567,11 @@ export default {
         this.tab = "all";
       },
       immediate: true,
+    },
+    "$route.query.spec"() {
+      this.f = {};
+      this.specFromRoute();
+      this.snapshot = null;
     },
     categoryName() {
       this.f = {};
@@ -525,7 +598,8 @@ export default {
 
   mounted() {
     this.unfit = fitOnResize(() => fitInCircle(this.$refs.dtsv));
-    this.mq = window.matchMedia("(min-width: 1200px)");
+    /* Toy Fair: the filters are always a drawer (the design's Filters button), never a sidebar */
+    this.mq = window.matchMedia("(min-width: 99999px)");
     this.wide = this.mq.matches;
     this.onMq = () => {
       this.wide = this.mq.matches;
@@ -614,6 +688,20 @@ export default {
       if (key === "new") return out.sort((a, b) => String(b.created_at || "").localeCompare(String(a.created_at || "")) || b.id - a.id);
       if (key === "saving") return out.sort((a, b) => this.pv(b).save - this.pv(a).save || a.id - b.id);
       return out;
+    },
+    underAll(max) {
+      return { name: window.$storefront.routes.SHOP_PAGE, query: { price: "0-" + max } };
+    },
+    /* ?spec=<key>:<value> (the home's ages, the gift finder): that spec value picked; "age" names the age key */
+    specFromRoute() {
+      const raw = String(this.$route?.query?.spec || "");
+      const i = raw.indexOf(":");
+      if (i < 1) return;
+      let key = raw.slice(0, i);
+      const val = raw.slice(i + 1);
+      if (key.toLowerCase() === "age") key = (this.facets.find((x) => /\bage/i.test(x.key)) || {}).key || "";
+      const facet = this.facets.find((x) => x.key === key);
+      if (facet && facet.values.includes(val)) this.f = { ...this.f, [key]: [val] };
     },
     resetRange() {
       this.min = this.lo;

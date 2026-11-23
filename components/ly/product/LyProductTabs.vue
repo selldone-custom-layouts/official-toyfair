@@ -1,79 +1,53 @@
 <!--
-  The product's tabs (pages-product.js tabs(), nicdark's single
-  product): Description (a lead from the product's own spec — its finish,
-  "Sold as one <unit>", its pairing, the saving — then the product's own
-  article when it has one, and "Why you'll love it": its pros), Additional
-  information (the spec in the shop's own groups, the SKU) and Reviews (n).
-  Reviews: with none yet, an honest card and the shop's rating criteria,
-  each "No score yet" — never stars or numbers; "Write the first review"
-  asks a guest to sign in and opens Selldone's own review box for a
-  signed-in shopper (only a buyer can rate). With reviews: Selldone's.
-  Arrow keys move along the tabs.
+  Toy Fair: the product's details as the design's accordions (shared/toy-fair.js fairProduct() details): Key features
+  (the first rows of the product's own specification), Product details (the product's own article, its pros and the
+  specification in the shop's own groups), Age suitability (from the spec), Reviews (real reviews only; none: an honest
+  "No reviews yet" with the rating criteria the shop set, each "No score yet"; writing one needs a signed-in buyer).
 -->
 <template>
-  <section id="tabs" :aria-label="t('ly.pd.details', 'Details')" class="pd-tabs">
-    <div class="wrap">
-      <div :aria-label="t('ly.pd.detailsAria', 'Product details')" class="tl" role="tablist" @keydown="keys">
-        <button
-          v-for="tb in tabs"
-          :id="'tb-' + tb.k"
-          :key="tb.k"
-          :aria-controls="'tp-' + tb.k"
-          :aria-selected="cur === tb.k ? 'true' : 'false'"
-          :tabindex="cur === tb.k ? 0 : -1"
-          class="tl-b"
-          role="tab"
-          type="button"
-          @click="cur = tb.k"
-        >
-          {{ tb.label }}
-        </button>
-      </div>
-
-      <div id="tp-desc" :hidden="cur !== 'desc'" aria-labelledby="tb-desc" class="tp" role="tabpanel">
-        <div :class="['pd-desc', { 'ly-solo': !pros.length }]">
-          <div class="pd-lead">
-            <p v-for="(l, i) in lead" :key="i">{{ l }}</p>
-          </div>
-          <template v-if="pros.length">
-            <h3 class="pd-sub">{{ t("ly.pd.love", "Why you’ll love it") }}</h3>
-            <ul class="pros">
-              <li v-for="(x, i) in pros" :key="i">
-                <span class="ck"><ly-icon name="check" /></span>
-                <div>
-                  <b>{{ x[0] }}</b>
-                  <p v-if="x[1]">{{ x[1] }}</p>
-                </div>
-              </li>
-            </ul>
-          </template>
-        </div>
-        <div v-if="articleBody" class="ly-pd-article" v-html="articleBody"></div>
-      </div>
-
-      <div id="tp-info" :hidden="cur !== 'info'" aria-labelledby="tb-info" class="tp" role="tabpanel">
-        <div class="spec">
-          <div v-for="g in groups" :key="g.group" class="spec-g">
-            <h3 v-if="g.group" class="pd-sub">{{ g.group }}</h3>
-            <dl class="spec-t">
-              <div v-for="r in g.rows" :key="r[0]">
-                <dt>{{ r[0] }}</dt>
-                <dd>{{ r[1] }}</dd>
-              </div>
-            </dl>
-          </div>
-          <div v-if="product.sku" class="spec-g ly-sku">
-            <dl class="spec-t">
-              <div>
-                <dt>{{ t("ly.pd.sku", "SKU") }}</dt>
-                <dd>{{ product.sku }}</dd>
-              </div>
-            </dl>
-          </div>
+  <section :aria-label="t('tf.pd.about', 'About this toy')" class="tf-details">
+    <details v-if="keys.length" class="tf-acc" open>
+      <summary>{{ t("tf.pd.keyFeatures", "Key features") }}<ly-icon cls="chev" name="down" /></summary>
+      <ul class="tf-keys">
+        <li v-for="r in keys" :key="r[0]"><b>{{ r[0] }}</b> · {{ r[1] }}</li>
+      </ul>
+    </details>
+    <details class="tf-acc" open>
+      <summary>{{ t("tf.pd.details", "Product details") }}<ly-icon cls="chev" name="down" /></summary>
+      <div v-if="articleBody" class="ly-pd-article tf-article" v-html="articleBody"></div>
+      <template v-if="pros.length">
+        <h3 class="pd-sub">{{ t("tf.pd.love", "Why they’ll love it") }}</h3>
+        <ul class="pros">
+          <li v-for="(x, i) in pros" :key="i">
+            <span class="ck"><ly-icon name="check" /></span>
+            <div>
+              <b>{{ x[0] }}</b>
+              <p v-if="x[1]">{{ x[1] }}</p>
+            </div>
+          </li>
+        </ul>
+      </template>
+      <div v-if="groups.length || product.sku" class="tf-spec">
+        <div v-for="g in groups" :key="g.group" class="tf-spec-g">
+          <h3 v-if="g.group">{{ g.group }}</h3>
+          <dl>
+            <div v-for="r in g.rows" :key="r[0]">
+              <dt>{{ r[0] }}</dt>
+              <dd>{{ r[1] }}</dd>
+            </div>
+          </dl>
         </div>
       </div>
-
-      <div id="tp-rev" :hidden="cur !== 'rev'" aria-labelledby="tb-rev" class="tp" role="tabpanel">
+    </details>
+    <details v-if="ageText" class="tf-acc">
+      <summary>{{ t("tf.pd.ageH", "Age suitability") }}<ly-icon cls="chev" name="down" /></summary>
+      <p class="tf-acc-p">{{ t("tf.pd.ageP", "Suggested for {age}. Check the packaging for safety notes.", { age: ageText }) }}</p>
+    </details>
+    <section id="tf-reviews" class="tf-acc tf-rev">
+      <button id="tb-rev" :aria-expanded="revOpen ? 'true' : 'false'" aria-controls="tf-rev-panel" class="tf-acc-btn" type="button" @click="revOpen = !revOpen">
+        {{ rated ? t("ly.pd.tabRev", "Reviews ({n})", { n: Number(product.rate_count) || 0 }) : t("tf.pd.reviews", "Reviews") }}<ly-icon cls="chev" name="down" />
+      </button>
+      <div v-show="revOpen" id="tf-rev-panel" class="tf-rev-in">
         <div v-if="!rated" :class="['revs', { 'ly-solo': !criteria.length }]">
           <ly-empty :text="noReviewsText" :title="t('ly.pd.noReviewsT', 'No reviews yet')" icon="star">
             <template v-if="!writing" #acts>
@@ -91,7 +65,7 @@
         </div>
         <div v-if="rated || writing" class="ly-rv-sd"><kalio-reviews /></div>
       </div>
-    </div>
+    </section>
   </section>
 </template>
 
@@ -102,6 +76,7 @@ import KalioReviews from "../../kalio/product/KalioReviews.vue";
 import { percentOff } from "../../kalio/kalio-catalog";
 import { prosOf, ratingNames, specGroups, specValue, unitOf } from "../ly";
 import { numberWord } from "./pd";
+import { ageOf } from "../toyfair/tf";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
@@ -109,7 +84,7 @@ export default {
   name: "LyProductTabs",
   components: { LyIcon, LyEmpty, KalioReviews },
   props: { product: { type: Object, required: true } },
-  data: () => ({ cur: "desc", writing: false }),
+  data: () => ({ cur: "desc", writing: false, revOpen: false }),
   computed: {
     user() {
       return this.$store.getters.getUser;
@@ -125,6 +100,14 @@ export default {
     },
     groups() {
       return specGroups(this.product);
+    },
+    ageText() {
+      return ageOf(this.product);
+    },
+    /* the first six rows of the spec, the age left for its own section */
+    keys() {
+      const rows = this.groups.flatMap((g) => g.rows).filter((r) => r[1] && !/(^|\s)age(\s|$)/i.test(r[0]));
+      return rows.slice(0, 6);
     },
     tabs() {
       return [
@@ -148,7 +131,7 @@ export default {
       return out;
     },
     articleBody() {
-      const body = this.product?.article_pack?.article?.body;
+      const body = this.product?.articles?.[0]?.body || this.product?.article_pack?.article?.body;
       return body && String(body).replace(/<[^>]*>/g, "").trim() ? body : null;
     },
     noReviewsText() {
@@ -161,6 +144,7 @@ export default {
     "product.id"() {
       this.cur = "desc";
       this.writing = false;
+      this.revOpen = false;
     },
   },
   methods: {
@@ -168,8 +152,9 @@ export default {
     /* "No reviews yet" in the buy column opens the Reviews tab. */
     open(k) {
       this.cur = k;
+      if (k === "rev") this.revOpen = true;
       this.$nextTick(() => {
-        document.getElementById("tabs")?.scrollIntoView({ behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? "auto" : "smooth", block: "start" });
+        document.getElementById(k === "rev" ? "tf-reviews" : "tabs")?.scrollIntoView({ behavior: window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ? "auto" : "smooth", block: "start" });
         document.getElementById("tb-" + k)?.focus({ preventScroll: true });
       });
     },
@@ -189,6 +174,7 @@ export default {
         return;
       }
       this.writing = true;
+      this.revOpen = true;
     },
   },
 };

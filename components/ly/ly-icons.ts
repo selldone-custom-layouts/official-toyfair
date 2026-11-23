@@ -72,39 +72,29 @@ export const ICONS: Record<string, string> = {
 };
 
 export const ART: Record<string, string> = {
+  /* Toy Fair: a toy line drawing under the base's name */
   croissant:
-    '<path d="M10 80c2-14 13-24 25-27 6-12 16-19 25-19s19 7 25 19c12 3 23 13 25 27-6 4-14 4-20-2-2 8-8 12-14 12-4 6-10 9-16 9s-12-3-16-9c-6 0-12-4-14-12-6 6-14 6-20 2z"/>' +
-    '<path d="M35 53c5 8 7 18 5 28M60 34c2 12 2 31 0 47M85 53c-5 8-7 18-5 28"/>' +
-    '<path d="M24 66c3 2 6 3 9 3M96 66c-3 2-6 3-9 3"/>',
+    '<rect x="22" y="62" width="34" height="34" rx="3"/><rect x="62" y="62" width="34" height="34" rx="3"/><rect x="42" y="26" width="34" height="34" rx="3"/>' +
+    '<path d="M32 72h14M72 72l14 14M86 72 72 86M52 36h14v14H52z"/>',
+  /* Toy Fair: a toy line drawing under the base's name */
   macaron:
-    '<path d="M18 49c0-14 19-24 42-24s42 10 42 24c0 6-19 10-42 10S18 55 18 49z"/>' +
-    '<path d="M20 59c4 4 6 4 8 0s6-4 8 0 6 4 8 0 6-4 8 0 6 4 8 0 6-4 8 0 6 4 8 0 6-4 8 0 6 4 8 0 6-4 8 0"/>' +
-    '<path d="M18 69c0 14 19 24 42 24s42-10 42-24c0-4-19-8-42-8s-42 4-42 8z"/>' +
-    '<path d="M34 38c6-4 14-6 22-6"/>',
+    '<circle cx="60" cy="60" r="38"/><path d="M60 22c-14 12-14 64 0 76M60 22c14 12 14 64 0 76M22 60c12-8 64-8 76 0"/>',
+  /* Toy Fair: a toy line drawing under the base's name */
   cupcake:
-    '<path d="M32 66h56l-7 36H39z"/>' +
-    '<path d="M46 66l2 36M60 66v36M74 66l-2 36"/>' +
-    '<path d="M28 66c-7-2-8-12-1-15-3-9 6-16 14-13 1-10 13-14 20-8 7-7 20-2 20 8 9-3 17 5 13 14 7 4 5 13-2 14z"/>' +
-    '<path d="M44 46c6-4 14-4 20 0M52 35c4-3 10-3 14 0"/>' +
-    '<circle cx="62" cy="21" r="5"/><path d="M63 16c1-5 5-8 10-8"/>',
+    '<circle cx="60" cy="64" r="30"/><circle cx="36" cy="38" r="11"/><circle cx="84" cy="38" r="11"/><ellipse cx="60" cy="74" rx="12" ry="9"/>' +
+    '<path d="M56 72h8M60 72v5"/><circle cx="49" cy="58" r="2"/><circle cx="71" cy="58" r="2"/>',
+  /* Toy Fair: a toy line drawing under the base's name */
   cake:
-    '<path d="M22 62c0-8 17-13 38-13s38 5 38 13v30c0 7-17 12-38 12s-38-5-38-12z"/>' +
-    '<path d="M22 70c3 6 7 6 9 0 2 8 8 8 10 1 3 7 9 7 11 0 3 6 9 6 11-1 2 7 8 7 11 1 3 6 8 5 10-1 2 6 7 6 9 0"/>' +
-    '<path d="M22 84c17 6 59 6 76 0"/>' +
-    '<circle cx="46" cy="43" r="5"/><circle cx="74" cy="43" r="5"/><path d="M47 38c1-5 4-8 8-9M75 38c1-5 4-8 8-9"/>' +
-    '<path d="M14 104h92"/>',
+    '<path d="M60 14 88 46 60 92 32 46z"/><path d="M60 14v78M32 46h56"/><path d="M60 92c-6 6 6 10 0 16s-8 4-10 8"/><path d="M54 100l-6 4 6 3M62 108l6 3-6 4"/>',
+  /* Toy Fair: a toy line drawing under the base's name */
   tart:
-    '<path d="M14 62c0-9 21-16 46-16s46 7 46 16-21 16-46 16-46-7-46-16z"/>' +
-    '<path d="M14 62v9c0 9 21 16 46 16s46-7 46-16v-9"/>' +
-    '<path d="M22 72v6M32 76v6M44 78v7M56 79v7M68 79v7M80 77v7M92 74v6M100 70v5"/>' +
-    '<circle cx="44" cy="60" r="6"/><circle cx="60" cy="56" r="6"/><circle cx="76" cy="60" r="6"/><circle cx="60" cy="67" r="4"/>',
+    '<path d="M60 24v-8M44 30h32l18 26-34 40-34-40z"/><path d="M26 56h68M60 96v8"/>',
+  /* Toy Fair: a toy line drawing under the base's name */
   cookie:
-    '<path d="M60 22c22 0 38 16 38 38S82 98 60 98 22 82 22 60c0-8 3-16 8-22 2 4 7 6 11 4-2-6 1-12 6-14 2-4 7-6 13-6z"/>' +
-    '<path d="M48 50l4 3M70 44l3 4M77 68l4 2M52 77l3 4M38 64l3 3M63 62l2 4M84 52l2 3"/>',
+    '<path d="M30 36h20c-4-12 24-12 20 0h20v20c12-4 12 24 0 20v20H70c4 12-24 12-20 0H30V76c-12 4-12-24 0-20z"/>',
+  /* Toy Fair: a toy line drawing under the base's name */
   whisk:
-    '<path d="M60 12v30"/><path d="M56 12h8"/>' +
-    '<path d="M60 42c-16 10-22 30-14 48 5 10 23 10 28 0 8-18 2-38-14-48z"/>' +
-    '<path d="M60 42c-7 12-9 30-5 50M60 42c7 12 9 30 5 50M60 42v52"/>',
+    '<path d="M60 14c18 14 22 38 14 64H46c-8-26-4-50 14-64z"/><circle cx="60" cy="44" r="8"/><path d="M46 78 34 92l14-2M74 78l12 14-14-2M52 84v14M60 84v18M68 84v14"/>',
   clock:
     '<circle cx="60" cy="66" r="34"/><circle cx="60" cy="66" r="27"/>' +
     '<path d="M60 48v18l12 8M53 26h14M60 26v6M84 38l5-5"/>',
