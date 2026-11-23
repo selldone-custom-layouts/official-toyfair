@@ -14,18 +14,30 @@
 
 ## Home
 
-1. **hero** (split): The shop's name and line on the left; the counter photo bleeding to the right edge of the frame, a framed inset across the seam with the best seller, the three most-ordered collections set large on the photo's dark corner (from Pralino).
-2. **collections** (cards): The same four as a 2 × 2 grid of cards, the photo on top inside the card (Domino).
-3. **journal** (photo, tint band): The four newest posts beside a tall photo with the big word 'Journal' (from Pralino; best last).
+1. **tf-hero** (panel): big words on a soft family-tint panel with two pills (the live offers, else the featured toys; the gift finder) beside the hero photo; on a phone the photo first.
+2. **tf-shelf** (featured, family-dark band): four toys: the live offers (biggest saving first) titled "<shop> offers", else the best sellers across departments.
+3. **tf-depts** (tiles): every department with toys as a picture tile with the category's own image; a scrolling row on a phone.
+4. **tf-shelf** (favourites): the next four best sellers, departments mixed.
+5. **tf-promos** (photos): the first two departments that have their own photo (`col-<slug>.webp`) as large photo cards; hidden on a shop whose departments have no photo.
+6. **tf-ages** (pills, tint band): every age the toys' own specification uses, youngest first; each opens the catalogue with `?spec=age:<value>`.
+7. **tf-shelf** (department): four toys of the department with the most toys after the first, under its own name.
+8. **tf-budget** (pills): four round "Under X" amounts that split the live prices; each opens the catalogue with `?price=0-X`.
+9. **tf-guides** (cards): the four newest posts of the shop's blog.
+10. **tf-help** (rows): delivery, pickup points (only with a pickup point; else payment options), order tracking.
+
+## Retail service pages (`components/ly/toyfair/retail/`)
+
+`/gift-finder`, `/pickup-points`, `/pickup-points/:id`, `/track-order`, `/register`, `/help`, `/help/delivery`, `/help/pickup`, `/help/returns`, `/help/stock`, `/help/pre-orders`, `/help/gift-cards`, `/help/payment`, `/help/product-notices`. All from the shop's live delivery ways, pickup points and gateways; an honest empty state where the shop has none (Toychi today: no pickup point).
 
 ## Photos
 
 | Slot | File | Size | In the build |
 | --- | --- | --- | --- |
 | hero | `skins/toyfair/photos/hero.webp` | 1440 × 960 | yes |
-| build | `skins/toyfair/photos/build.webp` | 1040 × 780 | yes |
-| together | `skins/toyfair/photos/together.webp` | 1040 × 780 | yes |
-| each collection | `skins/toyfair/photos/col-<slug of its title>.webp` | 1040 × 780 | 0 file(s); a collection without one shows its best sellers on a plate |
+| col-building-toys-blocks | `skins/toyfair/photos/col-building-toys-blocks.webp` | 1040 × 780 | yes (promo, gift finder) |
+| col-board-card-games | `skins/toyfair/photos/col-board-card-games.webp` | 1040 × 780 | yes (promo) |
+
+The photos are the design set's own (Toychi Layout Mockups, `shared/art`: fair-playroom, fair-build, fair-together).
 
 ## Checks
 

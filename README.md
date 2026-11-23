@@ -48,9 +48,16 @@ Everything is read live from the shop: its title (drawn as the wordmark), collec
 
 | # | Section | Variant | What it shows |
 | --- | --- | --- | --- |
-| 1 | `hero` | `split` | The shop's name and line on the left; the counter photo bleeding to the right edge of the frame, a framed inset across the seam with the best seller, the three most-ordered collections set large on the photo's dark corner (from Pralino). |
-| 2 | `collections` | `cards` | The same four as a 2 × 2 grid of cards, the photo on top inside the card (Domino). |
-| 3 | `journal` | `photo` | The four newest posts beside a tall photo with the big word 'Journal' (from Pralino; best last). |
+| 1 | `tf-hero` | `panel` | Toy Fair: big words on a soft family-tint panel with two pills (offers or featured toys; gift finder) beside the hero photo. |
+| 2 | `tf-shelf` | `featured` | Toy Fair: four toys on the family-dark band: the live offers, else the best sellers. |
+| 3 | `tf-depts` | `tiles` | Toy Fair: every department as a picture tile with its own image. |
+| 4 | `tf-shelf` | `favourites` | Toy Fair: the next four best sellers, departments mixed. |
+| 5 | `tf-promos` | `photos` | Toy Fair: the first two departments with their own photo, as large photo cards. |
+| 6 | `tf-ages` | `pills` | Toy Fair: every age the toys specify, youngest first, as pills. |
+| 7 | `tf-shelf` | `department` | Toy Fair: four toys of the department with the most toys after the first, under its own name. |
+| 8 | `tf-budget` | `pills` | Toy Fair: four round Under-X amounts from the live prices. |
+| 9 | `tf-guides` | `cards` | Toy Fair: the four newest posts as guide cards. |
+| 10 | `tf-help` | `rows` | Toy Fair: delivery, pickup points or payment, and order tracking. |
 
 A section the shop has no data for hides itself; tint bands alternate with white.
 
@@ -78,9 +85,7 @@ Not released yet. Before the first upload: `scripts/release.sh` step 5b (the pro
 | Slot | File | Size | In the build |
 | --- | --- | --- | --- |
 | hero | `skins/toyfair/photos/hero.webp` | 1440 × 960 | yes |
-| build | `skins/toyfair/photos/build.webp` | 1040 × 780 | yes |
-| together | `skins/toyfair/photos/together.webp` | 1040 × 780 | yes |
-| each collection | `skins/toyfair/photos/col-<slug of its title>.webp` | 1040 × 780 | 0 file(s); a collection without one shows its best sellers on a plate |
+| each collection | `skins/toyfair/photos/col-<slug of its title>.webp` | 1040 × 780 | 2 file(s); a collection without one shows its best sellers on a plate |
 
 ## Use it on your shop
 
