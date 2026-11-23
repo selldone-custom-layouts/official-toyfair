@@ -212,3 +212,5 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 /* a basket line on a phone: the line total gets its own column (it ran past the card's edge in the 44px one) */
 @media (max-width: 760px) { .ly .cr { grid-template-columns: 72px minmax(0, 1fr) auto; } .ly .cr-rm { justify-self: end; } }
 .ly .cr-n { font-family: var(--ly-sans); font-weight: 800; font-size: 19px; letter-spacing: -.02em; }
+/* Selldone's discount code button in sentence case */
+.ly .ly-code .v-btn, .ly .ly-code button { text-transform: none !important; letter-spacing: 0 !important; font-weight: 750; }
