@@ -67,6 +67,13 @@ html = html
   .replace(/https?:\\\/\\\/[^"]*?\\\/layouts\\\/\d+\\\/releases\\\/[0-9A-Za-z]{26}\\\/app\\\/shop\.(js|css)/g, (_m, ext) => `http:\\/\\/localhost:${PORT}\\/__ly\\/app\\/shop.${ext}`)
   .replace(/"assetBases":\[/, `"assetBases":["http:\\/\\/localhost:${PORT}\\/__ly\\/",`)
   .replace(/"local":false/, '"local":true');
+/* A domain with no Layout pinned yet (a new Layout's own domain before its first upload) loads Selldone's default
+   storefront (app.selldone.com/app/v…/shop.js): point that at the local build instead, so the first release is
+   checked through the shop's real HTML and loader too (Toy Fair 1.0.0, 24 Nov 2026). */
+if (!html.includes(`localhost:${PORT}\\/__ly\\/app\\/shop.js`)) {
+  html = html.replace(/https?:\\\/\\\/app\.selldone\.com\\\/app\\\/v\d+\\\/shop\.(js|css)/g, (_m, ext) => `http:\\/\\/localhost:${PORT}\\/__ly\\/app\\/shop.${ext}`);
+  if (html.includes(`localhost:${PORT}\\/__ly\\/app\\/shop.js`)) console.log(`${SHOP} has no Layout pinned yet: Selldone's default storefront in its loader now points at the local build`);
+}
 if (html === before || !html.includes(`localhost:${PORT}\\/__ly\\/app\\/shop.js`)) {
   console.error(`${SHOP} has no private Layout release in its loader to point at the local build; use a SHOP_URL whose domain has a Layout pinned`);
   process.exit(2);
