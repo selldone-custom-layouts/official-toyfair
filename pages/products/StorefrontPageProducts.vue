@@ -40,7 +40,7 @@ import { StorefrontSeo } from "../../helpers/StorefrontSeo";
 
 /* The query keys that ask for the listing. Anything else in the address
    (utm_*, fbclid, gclid, a cache-buster…) keeps the home. */
-const LISTING_KEYS = ["search", "filter", "sort", "dir", "page", "offset", "vendor_id", "tags", "price", "brand"];
+const LISTING_KEYS = ["search", "filter", "sort", "dir", "page", "offset", "vendor_id", "tags", "price", "brand", "spec"];
 
 function filterOf(query: any): any {
   try {

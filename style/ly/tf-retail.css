@@ -1,0 +1,169 @@
+/* ▆▆▆▆▆▆▆▆▆▆▆▆ Toy Fair: the retail service pages (design toy-fair: toy-fair-services.js, toy-fair.css) ▆▆▆▆▆▆▆▆▆▆▆▆
+
+   Help centre, the service pages (delivery, pickup, returns, stock, pre-orders, gift cards, payment, product notices),
+   the pickup finder and a pickup point, Track an order, Create an account and the gift finder. Every page root is
+   `.ly.tf-page.tf-rt`; every class here starts with tf-rt- (and reuses tf.css's .tf-sym, .tf-more, .tf-ages,
+   .tf-brand, .tf-glyph). One colour family (tokens only), pills for buttons and inputs, 12px panels, 8px inner,
+   no underline, hover = colour only, focus = one inset ring. Logical properties only, so right-to-left works. */
+
+/* ── the page: the design's soft wash behind white panels ── */
+.ly.tf-rt { min-height: 60vh; background: var(--ly-band); color: var(--ly-ink); }
+/* the Layout gives every page 24px below it (inline); the last block adds the rest of the design 64px */
+.ly.tf-rt > .wrap:last-child { padding-bottom: 40px; }
+
+/* ── the title band (design .breadcrumb + .page-title): left aligned on the page's wash, no drawing ── */
+.ly.tf-rt .pt.compact { background: transparent; text-align: start; padding-block: 25px 27px; overflow: visible; }
+.ly.tf-rt .pt::after { content: none; }
+.ly.tf-rt .pt .art { display: none; }
+.ly.tf-rt .pt .pt-in { align-items: flex-start; }
+.ly.tf-rt .pt .crumbs ol { justify-content: flex-start; gap: 2px 0; font: 500 13px/1.3 var(--ly-sans); letter-spacing: 0; text-transform: none; color: var(--ly-muted); }
+.ly.tf-rt .pt .crumbs li { display: inline-flex; align-items: center; min-width: 0; }
+.ly.tf-rt .pt .crumbs li:not(:last-child)::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-block: 0; margin-inline: 8px 11px; border-radius: 0; background: none; opacity: .75; border-top: 1.5px solid currentColor; border-right: 1.5px solid currentColor; transform: rotate(45deg); }
+[dir="rtl"] .ly.tf-rt .pt .crumbs li:not(:last-child)::after, .ly.tf-rt[dir="rtl"] .pt .crumbs li:not(:last-child)::after { transform: rotate(-135deg); }
+.ly.tf-rt .pt .crumbs :is(a, [aria-current]) { padding: 4px; border-radius: var(--ly-r-in); color: var(--ly-ink); overflow-wrap: anywhere; }
+.ly.tf-rt .pt .crumbs a:hover { color: var(--ly-act-text); }
+.ly.tf-rt .pt.compact .pt-h { margin-top: 19px; max-width: none; font: normal 700 67px/1.06 var(--ly-serif); letter-spacing: -.06em; color: var(--ly-ink); overflow-wrap: anywhere; }
+.ly.tf-rt .pt .pt-l { margin-top: 9px; max-width: 58ch; font-size: 16.6px; font-weight: 500; line-height: 1.53; color: var(--ly-muted); text-wrap: balance; }
+
+/* ── a panel (design .panel): white, a hairline, 12px ── */
+.ly.tf-rt .tf-rt-panel { min-width: 0; padding: clamp(16px, 3%, 32px); border-radius: var(--ly-r-pn); background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-narrow { width: min(100%, 720px); }
+.ly.tf-rt .tf-rt-chev { width: 18px; height: 18px; color: var(--ly-ink); }
+[dir="rtl"] .ly.tf-rt .tf-rt-chev, .ly.tf-rt[dir="rtl"] .tf-rt-chev { transform: scaleX(-1); }
+.ly.tf-rt .tf-sym .i { width: 19px; height: 19px; }
+
+/* ── an empty state inside a panel ── */
+.ly.tf-rt .tf-rt-empty { padding: 30px 12px; }
+.ly.tf-rt .tf-rt-empty .em-ic { background: var(--ly-tint2); }
+.ly.tf-rt .tf-rt-empty .em-t { font: 850 26px/1.15 var(--ly-serif); letter-spacing: -.035em; color: var(--ly-ink); text-wrap: balance; }
+.ly.tf-rt .tf-rt-empty .em-p { font-size: 15px; }
+
+/* ━━━━━━━━━━━━ Help centre (design .fair-help-grid) ━━━━━━━━━━━━ */
+.ly.tf-rt .tf-rt-topics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.ly.tf-rt .tf-rt-topics > li { display: grid; min-width: 0; }
+.ly.tf-rt .tf-rt-topic { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 66px; padding: 12px; border-radius: var(--ly-r-pn); background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-topic:hover { background: var(--ly-act-soft); color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-topic-tx { display: grid; gap: 1px; min-width: 0; }
+.ly.tf-rt .tf-rt-topic-h { font: 800 18.4px/1.06 var(--ly-serif); letter-spacing: -.01em; color: inherit; overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-topic-p { font-size: 13.6px; line-height: 1.53; color: var(--ly-ink); }
+
+/* ━━━━━━━━━━━━ A service page (design .fair-service-layout) ━━━━━━━━━━━━ */
+.ly.tf-rt .tf-rt-svc { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr); align-items: start; gap: 12px; }
+.ly.tf-rt .tf-rt-art { padding: clamp(16px, 3%, 25px); }
+.ly.tf-rt .tf-rt-sec + .tf-rt-sec { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--ly-line); }
+.ly.tf-rt .tf-rt-sec-h { font: 700 34.5px/1.06 var(--ly-serif); letter-spacing: -.01em; color: var(--ly-ink); overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-sec > p { margin-top: 8px; font-size: 15px; line-height: 1.55; }
+.ly.tf-rt .tf-rt-own { white-space: pre-line; overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-sec > .tf-more { margin-top: 8px; margin-inline-start: -5px; }
+.ly.tf-rt .tf-rt-facts { display: grid; gap: 9px; margin-top: 12px; }
+.ly.tf-rt .tf-rt-facts li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; line-height: 1.45; min-width: 0; }
+.ly.tf-rt .tf-rt-facts .i { width: 20px; height: 20px; margin-top: 1px; color: var(--ly-act-text); }
+.ly.tf-rt .tf-rt-facts span { min-width: 0; overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ly.tf-rt .tf-rt-tag { display: inline-flex; align-items: center; min-height: 28px; padding: 3px 12px; border-radius: var(--tf-pill); background: var(--ly-act-soft); color: var(--ly-ink); font-size: 12.8px; font-weight: 750; }
+.ly.tf-rt .tf-rt-plist { display: grid; gap: 6px; margin-top: 12px; }
+.ly.tf-rt .tf-rt-prow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 12px; padding-inline-start: 8px; border-radius: var(--ly-r-pn); box-shadow: inset 0 0 0 1px var(--ly-line); color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-prow:hover { background: var(--ly-act-soft); color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-prow-tx { display: grid; min-width: 0; }
+.ly.tf-rt .tf-rt-prow-tx strong { font-size: 16px; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-prow-tx small { font-size: 13.5px; color: var(--ly-muted); overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-next { display: grid; align-content: start; justify-items: start; gap: 8px; padding: 16px; }
+.ly.tf-rt .tf-rt-next-h { margin-bottom: 1px; font: 700 20.2px/1.06 var(--ly-serif); letter-spacing: -.01em; color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-next .btn { max-width: 100%; white-space: normal; text-align: center; }
+
+/* ━━━━━━━━━━━━ Pickup finder and a pickup point (design .fair-pickup-*, .fair-store-detail) ━━━━━━━━━━━━ */
+.ly.tf-rt .tf-rt-search { display: grid; gap: 7px; max-width: 460px; margin-bottom: 11px; }
+.ly.tf-rt .tf-rt-picks { display: grid; gap: 8px; }
+.ly.tf-rt .tf-rt-pick { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px 12px; }
+.ly.tf-rt .tf-rt-pick-tx { min-width: 0; }
+.ly.tf-rt .tf-rt-pick-h { font: 800 20.5px/1.2 var(--ly-serif); letter-spacing: -.02em; color: var(--ly-ink); overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-pick-tx p { margin-top: 2px; font-size: 15px; color: var(--ly-muted); overflow-wrap: anywhere; }
+.ly.tf-rt .tf-rt-pick-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.ly.tf-rt .tf-rt-pick-acts .btn .i { width: 17px; height: 17px; }
+.ly.tf-rt .tf-rt-none { margin-top: 8px; color: var(--ly-muted); }
+.ly.tf-rt .tf-rt-point { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.ly.tf-rt .tf-rt-point > .tf-rt-pick, .ly.tf-rt .tf-rt-point > section:last-child:nth-child(even) { grid-column: 1 / -1; }
+.ly.tf-rt .tf-rt-box-h { margin-bottom: 8px; font: 700 20.8px/1.15 var(--ly-serif); letter-spacing: -.01em; color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-hours > div { display: flex; justify-content: space-between; gap: 12px; padding-block: 9px; border-bottom: 1px solid var(--ly-line); }
+.ly.tf-rt .tf-rt-hours > div:last-child { border-bottom: 0; }
+.ly.tf-rt .tf-rt-hours dt { min-width: 0; }
+.ly.tf-rt .tf-rt-hours dd { font-weight: 750; white-space: nowrap; text-align: end; }
+.ly.tf-rt .tf-rt-hours dd.tf-rt-wrap { white-space: normal; min-width: 0; }
+.ly.tf-rt .tf-rt-steps { display: grid; gap: 8px; margin: 8px 0 12px; padding-inline-start: 22px; list-style: decimal; }
+.ly.tf-rt .tf-rt-steps li { padding-inline-start: 2px; line-height: 1.5; }
+.ly.tf-rt .tf-rt-steps li::marker { color: var(--ly-act-text); font-weight: 800; }
+.ly.tf-rt .tf-rt-point section > .tf-more { margin-inline-start: -5px; }
+
+/* ━━━━━━━━━━━━ Forms: Track an order, the gift finder (design .form-stack) ━━━━━━━━━━━━ */
+.ly.tf-rt .tf-rt-form { display: grid; gap: 8px; align-content: start; }
+.ly.tf-rt .tf-rt-field { display: grid; gap: 8px; min-width: 0; }
+.ly.tf-rt .tf-rt-lbl { font-size: 15px; font-weight: 750; color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-in, .ly.tf-rt .tf-rt-sel select { display: block; width: 100%; min-width: 0; min-height: 46px; margin: 0; padding: 0 18px; border: 0; border-radius: var(--tf-pill); background: var(--ly-paper); color: var(--ly-ink); box-shadow: inset 0 0 0 1px var(--ly-line-2); font: 500 15px/1.3 var(--ly-sans); outline: none; }
+.ly.tf-rt .tf-rt-in::placeholder { color: var(--ly-muted); opacity: 1; }
+.ly.tf-rt .tf-rt-in::-webkit-search-cancel-button { cursor: pointer; }
+.ly.tf-rt .tf-rt-in:hover, .ly.tf-rt .tf-rt-sel select:hover { box-shadow: inset 0 0 0 1px var(--ly-act); }
+.ly.tf-rt .tf-rt-in:focus, .ly.tf-rt .tf-rt-in:focus-visible, .ly.tf-rt .tf-rt-sel select:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--ly-ring); }
+.ly.tf-rt .tf-rt-in[aria-invalid="true"] { box-shadow: inset 0 0 0 2px var(--ly-err); }
+.ly.tf-rt .tf-rt-sel { position: relative; display: block; min-width: 0; }
+.ly.tf-rt .tf-rt-sel select { appearance: none; -webkit-appearance: none; padding-inline-end: 50px; cursor: pointer; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.ly.tf-rt .tf-rt-sel select::-ms-expand { display: none; }
+.ly.tf-rt .tf-rt-sel option { background: var(--ly-paper); color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-sel .i { position: absolute; top: 50%; inset-inline-end: 18px; width: 18px; height: 18px; margin-top: -9px; color: var(--ly-ink); pointer-events: none; }
+.ly.tf-rt .tf-rt-hint { font-size: 13px; color: var(--ly-muted); }
+.ly.tf-rt .tf-rt-err { font-size: 13.5px; font-weight: 650; color: var(--ly-err); }
+.ly.tf-rt .tf-rt-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.ly.tf-rt .tf-rt-note { margin-top: 10px; font-size: 14px; color: var(--ly-muted); }
+.ly.tf-rt .tf-rt-links { display: flex; flex-wrap: wrap; gap: 2px 16px; margin-inline-start: -5px; }
+
+/* ── Create an account (design .login-card) ── */
+.ly.tf-rt .tf-rt-login { display: grid; gap: 10px; justify-items: start; }
+.ly.tf-rt .tf-rt-brand { margin-bottom: 8px; color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-brand .tf-glyph { display: grid; }
+.ly.tf-rt .tf-rt-brand .wm { align-items: flex-start; padding: 0; color: var(--ly-ink); }
+.ly.tf-rt .tf-rt-brand .wm-dot { background: var(--ly-act); }
+.ly.tf-rt .tf-rt-brand .wm-sub { color: var(--ly-act-text); }
+.ly.tf-rt .tf-rt-login-p { font-size: 15px; }
+
+/* ── the gift finder (design .fair-gift-panel, .fair-gift-photo) ── */
+.ly.tf-rt .tf-rt-gift { display: grid; grid-template-columns: minmax(0, 1.14fr) minmax(0, .86fr); align-items: stretch; gap: 12px; }
+.ly.tf-rt .tf-rt-gift.no-ph { grid-template-columns: minmax(0, 560px); }
+.ly.tf-rt .tf-rt-gift-ph { min-height: 0; aspect-ratio: 1.95; overflow: hidden; border-radius: var(--ly-r-in); background: var(--ly-tint2); }
+.ly.tf-rt .tf-rt-gift-ph img { width: 100%; height: 100%; object-fit: cover; }
+.ly.tf-rt .tf-rt-gift-form { align-content: center; gap: 12px; padding: 9px; }
+.ly.tf-rt .tf-rt-gift-form .tf-rt-field { gap: 5px; }
+.ly.tf-rt .tf-rt-gift-form .tf-rt-acts { margin-top: 2px; }
+.ly.tf-rt .tf-rt-ages { padding-top: 42px; }
+.ly.tf-rt .tf-rt-ages-h { margin-bottom: 19px; font: 850 39.2px/1.06 var(--ly-serif); letter-spacing: -.04em; color: var(--ly-ink); }
+
+/* ━━━━━━━━━━━━ Smaller screens ━━━━━━━━━━━━ */
+@media (max-width: 1050px) {
+  .ly.tf-rt .pt.compact .pt-h { font-size: 54px; }
+  .ly.tf-rt .tf-rt-sec-h { font-size: 30px; }
+}
+@media (max-width: 1050px) and (min-width: 601px) {
+  .ly.tf-rt .tf-rt-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 800px) {
+  .ly.tf-rt .tf-rt-svc, .ly.tf-rt .tf-rt-gift { grid-template-columns: minmax(0, 1fr); }
+  .ly.tf-rt .tf-rt-ages-h { font-size: 30px; }
+}
+@media (max-width: 700px) {
+  .ly.tf-rt .tf-rt-point { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .ly.tf-rt > .wrap:last-child { padding-bottom: 16px; }
+  .ly.tf-rt .pt.compact { padding-block: 16px 20px; }
+  .ly.tf-rt .pt.compact .pt-h { margin-top: 12px; font-size: 38px; letter-spacing: -.055em; }
+  .ly.tf-rt .pt .pt-l { margin-top: 8px; font-size: 15px; }
+  .ly.tf-rt .tf-rt-topics { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .ly.tf-rt .tf-rt-topic { padding: 10px 12px; }
+  .ly.tf-rt .tf-rt-sec-h { font-size: 24px; letter-spacing: -.03em; }
+  .ly.tf-rt .tf-rt-sec + .tf-rt-sec { margin-top: 20px; padding-top: 16px; }
+  .ly.tf-rt .tf-rt-pick { grid-template-columns: auto minmax(0, 1fr); padding: 12px; }
+  .ly.tf-rt .tf-rt-pick-acts { grid-column: 1 / -1; }
+  .ly.tf-rt .tf-rt-pick-h { font-size: 19px; }
+  .ly.tf-rt .tf-rt-empty { padding: 22px 4px; }
+  .ly.tf-rt .tf-rt-empty .em-t { font-size: 22px; }
+  .ly.tf-rt .tf-rt-ages { padding-top: 28px; }
+  .ly.tf-rt .tf-rt-ages-h { font-size: 24px; margin-bottom: 12px; }
+}

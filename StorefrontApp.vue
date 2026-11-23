@@ -571,6 +571,7 @@ export default {
 <style src="./style/ly/variants.css"></style>
 <style src="./style/ly/tf.css"></style>
 <style src="./style/ly/tf-pages.css"></style>
+<style src="./style/ly/tf-retail.css"></style>
 
 <style lang="scss">
 /*
