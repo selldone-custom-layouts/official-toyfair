@@ -112,6 +112,7 @@
                 </label>
               </div>
               <p v-if="nx_more_later" class="cdlv-n"><ly-icon name="pin" />{{ t("tf.co.doorAtCheckout", "Delivery to your door shows at checkout, once your address is in.") }}</p>
+              <p v-else-if="nx_door_line" class="cdlv-n tf-door"><ly-icon name="truck" />{{ nx_door_line }}</p>
               <p class="cdlv-n"><ly-icon name="info" />{{ t("ly.co.windowLater", "The time window is chosen at checkout.") }}</p>
             </div>
           </div>

@@ -311,6 +311,14 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
   .ly .acc { grid-template-columns: minmax(200px, .41fr) minmax(0, 1fr); gap: 14px; }
   .ly .acc-nav { position: sticky; }
   .ly .acc-nav ul { display: grid; gap: 2px; }
-  .ly .od-g { grid-template-columns: minmax(0, 1fr) minmax(260px, .8fr); gap: 14px; }
-  .ly .od-g .chat { position: sticky; }
+}
+/* a bag line narrower than 560px (the bag's column on a tablet, a phone) takes the phone's two rows: the photo, the
+   name and the bin, then the stepper and the price (1.0.5 kept five columns at 820px and broke the names letter by
+   letter) */
+.ly .crl { container: crl / inline-size; }
+@container crl (max-width: 560px) {
+  .ly .cr { grid-template-columns: 72px minmax(0, 1fr) auto; grid-template-areas: "pl tx rm" "q q lt"; gap: 12px 14px; padding: 12px; }
+  .ly .cr-pl { width: 72px; height: 72px; }
+  .ly .cr-q { justify-self: start; }
+  .ly .cr-rm { align-self: start; justify-self: end; }
 }

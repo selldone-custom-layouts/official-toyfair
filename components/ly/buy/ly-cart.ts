@@ -18,7 +18,7 @@
  */
 import { ShopTransportations } from "@selldone/core-js/enums/logistic/ShopTransportations";
 import { ETA } from "@selldone/core-js/enums/logistic/ETA.ts";
-import { catImage, catOf, catTitle, catTo, closeLayer, deliveryWays, hueOf, layer, loadDm, ly, bySells, openLayer, shopFacts, unitOf, productTo, wayTitle } from "../ly";
+import { catImage, catOf, catTitle, catTo, closeLayer, deliveryWays, hueOf, layer, loadDm, ly, bySells, openLayer, pickupName, shopFacts, unitOf, productTo, wayTitle } from "../ly";
 import { catalogueRoute } from "../../kalio/kalio-catalog";
 import { shownCount, stepTo } from "../../kalio/kalio-basket";
 import { productImage } from "../../kalio/kalio-catalog";
@@ -290,11 +290,29 @@ export default {
       if (way.type === ShopTransportations.Pickup.code) return true;
       return !(Number(way.const) > 0) && !(Number(way.distance_rate) > 0) && !(Number(way.weight_rate) > 0);
     },
-    /* The shop has ways to the door the bag does not list yet (a courier's radius, a truck): they come with the
-       address at checkout. */
+    /* No address yet (or the pickup counter in its place) and the shop has ways to the door the bag does not list
+       (a courier's radius, a truck): they come with the address at checkout. Once an address is in, nx_door_line says
+       what reaches it (Toy Fair 1.0.5 kept this note with a Los Angeles address the truck reached). */
     nx_more_later(this: any): boolean {
+      if (this.nx_has_address) return false;
       const listed = new Set((this.transportation_list || []).map((w: any) => w.type));
       return deliveryWays(this.$shop).some((w: any) => !w.pickup && !listed.has(w.type));
+    },
+    /* With an address in: the ways to the door that reach it, by name and price ("Delivers to Los Angeles: Toychi
+       truck delivery · Free"); when none does, that door delivery does not reach it, and the pickup point if any. */
+    nx_door_line(this: any): string {
+      if (!this.nx_has_address) return "";
+      const r = this.receiver_info || {};
+      const place = String(r.city || "").trim() || String(r.address || "").split(",")[0].trim();
+      const list = this.transportation_list || [];
+      const door = list.filter((w: any) => w.type !== ShopTransportations.Pickup.code);
+      if (door.length) {
+        const ways = door.map((w: any) => `${wayTitle(w, this.$shop)} · ${this.nx_way_fee(w)}`).join("; ");
+        return place ? t("tf.co.doorTo", "Delivers to {place}: {ways}", { place, ways }) : t("tf.co.doorToHere", "Delivers to your address: {ways}", { ways });
+      }
+      const pickup = list.find((w: any) => w.type === ShopTransportations.Pickup.code && w.pickups?.length);
+      if (pickup) return t("tf.co.doorNonePickup", "Door delivery doesn't reach this address. Pickup is available: {point}.", { point: pickupName(pickup.pickups[0]) });
+      return t("tf.co.doorNone", "Door delivery doesn't reach this address.");
     },
     /* The bag's delivery ways in the checkout's order: the ways, then pickup. */
     nx_ways_in_order(this: any): any[] {

@@ -134,6 +134,8 @@
     </p>
     <!-- Pickup is listed, the ways to the door come with the address (a courier's radius, a truck) -->
     <p v-if="moreLater && (transportation_exclude_pickup?.length || pickups?.length)" class="cdlv-n ly-ship-more"><ly-icon name="pin" />{{ t("tf.co.doorLater", "Delivery to your door shows here once your address is in.") }}</p>
+    <!-- An address is in and no way to the door reaches it: said plainly, beside the pickup point -->
+    <p v-else-if="doorNone" class="cdlv-n ly-ship-more"><ly-icon name="pin" />{{ doorNone }}</p>
 
     <template v-if="transportation">
       <div v-if="windowsOn && timeItems.length && !dmShipSheet" class="wins">
@@ -253,6 +255,15 @@ export default defineComponent({
     /** The shop's pickup points for this package. */
     pickups() {
       return this.isPhysicalBasket ? this.pickup_transportation?.pickups || [] : [];
+    },
+    /** A home address is in, no way to the door reaches it, the shop's pickup point does: say so. */
+    doorNone() {
+      if (this.dmShipSheet) return "";
+      const r = this.receiver_info || {};
+      const atCounter = !!r.address && this.pickups.some((p) => p.address === r.address);
+      if (!r.address || !this.is_valid_location || atCounter) return "";
+      if ((this.transportation_exclude_pickup || []).length || !this.pickups.length) return "";
+      return t("tf.co.doorNonePickup", "Door delivery doesn't reach this address. Pickup is available: {point}.", { point: pickupName(this.pickups[0]) });
     },
     /** The shop has ways to the door this list does not offer yet, and no home address is in (none, or the pickup
      *  counter in its place): they come with the address. With a home address in, a way missing does not reach it. */

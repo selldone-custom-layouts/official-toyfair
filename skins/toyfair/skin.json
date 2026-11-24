@@ -903,7 +903,11 @@
       "tf.rt.pk.windows": "فترات الاستلام",
       "tf.rt.dl.anyDistance": "بلا حد للمسافة",
       "tf.rd.pickupAt": "تنتظر الطلبات في {name}، {address}.",
-      "tf.ct.pickupH": "نقطة الاستلام"
+      "tf.ct.pickupH": "نقطة الاستلام",
+      "tf.co.doorTo": "يصل التوصيل إلى {place}: {ways}",
+      "tf.co.doorToHere": "يصل التوصيل إلى عنوانك: {ways}",
+      "tf.co.doorNonePickup": "التوصيل إلى الباب لا يصل إلى هذا العنوان. الاستلام متاح: {point}.",
+      "tf.co.doorNone": "التوصيل إلى الباب لا يصل إلى هذا العنوان."
     }
   }
 }
