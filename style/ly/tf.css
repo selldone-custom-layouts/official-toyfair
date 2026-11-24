@@ -245,7 +245,7 @@
   .tf-card .tf-buy { padding-inline: 8px; }
   .tf-card .tf-info { padding-inline: 8px; }
   /* a small card (a phone, four to a row on a tablet): the heart smaller and tight in its corner, off the toy */
-  .ly .tf-card .tf-heart { top: 6px; inset-inline-end: 6px; width: 30px; height: 30px; }
+  .ly .tf-card .tf-heart { width: 30px; height: 30px; }
   .ly .tf-card .tf-heart .i { width: 15px; height: 15px; }
 }
 @media (max-width: 600px) {
@@ -261,7 +261,8 @@
 @media (max-width: 1050px) { .ly .tf-grid { gap: 10px; } }
 @media (max-width: 800px) { .ly .tf-grid:not(.tf-rail) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; --ly-cols: 3; } }
 @media (max-width: 600px) {
-  .ly .tf-grid, .ly .tf-grid.tf-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; --ly-cols: 2; }
+  /* (the tablet's :not(.tf-rail) rule is as specific: named here too, or a phone kept three 110px columns) */
+  .ly .tf-grid:not(.tf-rail), .ly .tf-grid.tf-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; --ly-cols: 2; }
   .ly .tf-rail[data-n="3"] > :nth-child(3) { display: none; }
 }
 
@@ -313,7 +314,7 @@
 .tf-guides { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 /* a tablet: two by two (three guides: three across), never one alone in a row */
 @media (max-width: 1050px) { .tf-guides { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tf-guides[data-n="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 600px) { .tf-guides { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { .tf-guides, .tf-guides[data-n] { grid-template-columns: minmax(0, 1fr); } }
 .ly .tf-guide { display: grid; grid-template-rows: auto 1fr; height: 100%; padding: 9px; border-radius: var(--ly-r-pn); background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); color: var(--ly-ink); }
 .tf-guide-ph { display: block; aspect-ratio: 1.6; overflow: hidden; border-radius: var(--ly-r-in); background: var(--ly-band); }
 .tf-guide-ph img { width: 100%; height: 100%; object-fit: cover; }
