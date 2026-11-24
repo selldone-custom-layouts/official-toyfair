@@ -270,3 +270,14 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 @media (max-width: 760px) { .ly .art-cov { margin-top: 4px; } }
 /* compare: the label column keeps "Comparing" and the count; the products carry their own departments */
 .ly .cmp-row.hd .cl.lab .cl-t { display: none; }
+/* compare inside one white panel (the design's compare board) */
+.ly .cmp { padding: 14px 18px 18px; border-radius: var(--ly-r-pn); background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); }
+.ly .cmp-gh { font-size: 13px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ly-act-text); }
+@media (max-width: 760px) { .ly .cmp { padding: 10px 10px 14px; } }
+
+/* ━━━━ The address and map sheet: the design's sentence-case pills ━━━━ */
+.ly-layers .k-sheet__go, .k-sheet .k-sheet__go { border-radius: var(--tf-pill) !important; letter-spacing: 0 !important; text-transform: none !important; text-indent: 0 !important; text-box: normal; font: 750 15px/1 var(--ly-sans) !important; min-height: 48px; }
+.ly-layers .k-sheet__ghost, .k-sheet .k-sheet__ghost { border-radius: var(--tf-pill) !important; font-weight: 750 !important; }
+.k-sheet .k-sheet__head h2 { font-weight: 850 !important; letter-spacing: -.035em !important; }
+.k-sheet .k-addr__eyebrow { letter-spacing: .1em; }
+.k-sheet .k-addr__locate { border-radius: var(--tf-pill) !important; }
