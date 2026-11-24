@@ -8,7 +8,7 @@
  * Every sample is shown with the label "Sample text — the shop has not
  * written this page yet" (LySampleTag.vue).
  */
-import { shopFacts, type ShopFacts } from "../ly";
+import { shopFacts, type ShopFacts, isLocalWay } from "../ly";
 import { t } from "../../kalio/i18n/kalio-i18n";
 
 declare const window: any;
@@ -65,7 +65,8 @@ export function shopName(shop: any): string {
 
 /** "1 The Embarcadero, San Francisco". */
 export function shortAddress(f: ShopFacts): string {
-  const street = f.pickupPoint?.address || String(f.address || "").split(",")[0];
+  /* the shop's own address (a pickup point is where orders wait: Toy Fair, 24 Nov 2026) */
+  const street = String(f.address || "").split(",")[0];
   return [street, f.city].filter(Boolean).join(", ");
 }
 
@@ -94,7 +95,7 @@ export function waySentences(f: ShopFacts, money: (n: number) => string): string
   const out: string[] = [];
   const c = f.courier;
   if (c) {
-    const near = c.distance ? t("bakini.n.rd.within", " within {km} km of the bakery", { km: c.distance }) : "";
+    const near = isLocalWay(c) ? t("bakini.n.rd.within", " within {km} km of the bakery", { km: c.distance }) : "";
     const win = c.windows.length ? t("bakini.n.rd.inWindow", " in the window you choose: {windows}", { windows: list(c.windows) }) : "";
     out.push(t("bakini.n.rd.courierSays", "The {name} delivers{near}{win}.", { name: c.title, near, win }));
   }
@@ -180,7 +181,7 @@ export function sampleFaq(shop: any, f: ShopFacts, money: (n: number) => string,
   if (f.courier) {
     const c = f.courier;
     const win = c.windows.length ? t("bakini.n.rd.fWin", " Choose a {windows} window at checkout.", { windows: list(c.windows, "disjunction") }) : "";
-    const near = c.distance ? t("bakini.n.rd.within", " within {km} km of the bakery", { km: c.distance }) : "";
+    const near = isLocalWay(c) ? t("bakini.n.rd.within", " within {km} km of the bakery", { km: c.distance }) : "";
     const fee = c.fee ? "" : t("bakini.n.rd.fFree", " Courier delivery is free.");
     out.push({ group: G.deliver, q: t("bakini.n.rd.fq4", "When can the courier deliver?"), a: t("bakini.n.rd.fa4", "The {name} delivers{near}{days}.{win}{fee}", { name: c.title, near, days: c.days.length >= 7 ? t("bakini.n.rd.everyDayComma", ", every day") : "", win, fee }) });
   }
@@ -188,10 +189,14 @@ export function sampleFaq(shop: any, f: ShopFacts, money: (n: number) => string,
     const s = f.shipping;
     const fee = s.fee ? t("bakini.n.rd.fCosts", " It costs {fee}", { fee: money(s.fee) }) : t("bakini.n.rd.fNoFee", " It is free");
     const free = s.freeOver ? t("bakini.n.rd.fFreeOver", " and is free on orders over {amount}", { amount: money(s.freeOver) }) : "";
-    out.push({ group: G.deliver, q: t("bakini.n.rd.fq5", "Do you ship further away?"), a: t("bakini.n.rd.fa5", "Yes, with {name}.{fee}{free}. Pastries are delicate, so consider the distance.", { name: s.title.toLowerCase(), fee, free }) });
+    out.push({ group: G.deliver, q: t("bakini.n.rd.fq5", "Do you ship further away?"), a: t("bakini.n.rd.fa5", "Yes, with {name}.{fee}{free}. Pastries are delicate, so consider the distance.", { name: s.type === "Global" || s.type === "Post" ? s.title.toLowerCase() : s.title, fee, free }) });
   }
   if (f.pickup) {
-    const where = [f.pickupNote || "", f.address ? t("bakini.n.rd.fAt", "The counter is at {address}.", { address: f.address }) : ""].filter(Boolean).join(" ");
+    /* the pickup point's own name and address (the shop's address is not where orders wait) */
+    const pt = f.pickupPoint;
+    const ptAddr = pt ? [pt.address, pt.city].filter(Boolean).join(", ") : "";
+    const at = pt?.name && ptAddr ? t("tf.rd.pickupAt", "Orders wait at {name}, {address}.", { name: pt.name, address: ptAddr }) : f.address ? t("bakini.n.rd.fAt", "The counter is at {address}.", { address: f.address }) : "";
+    const where = [f.pickupNote || "", at].filter(Boolean).join(" ");
     out.push({ group: G.deliver, q: t("bakini.n.rd.fq6", "Where do I pick up my order?"), a: (where + " " + (f.pickup.fee ? "" : t("bakini.n.rd.fPickupFree", "Pickup is free."))).trim() });
   }
   out.push({ group: G.pay, q: t("bakini.n.rd.fq7", "How do I pay?"), a: paySentence(f) });

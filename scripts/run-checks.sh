@@ -9,7 +9,7 @@
 # Run it through new-shop-kits/pw-lock.sh. Needs MSYS_NO_PATHCONV=1 on Git Bash (set here).
 # A shop that sells in English only: on dev, localStorage "<skin>-dev-languages" = "ar" offers Arabic in the test
 # browser (StorefrontMixin, dev build only), so the Arabic runs really render in Arabic; on a live shop the Arabic
-# runs go through scripts/pw-shop-languages.cjs. Widths: 1440, 1024 and 390 where a check takes WIDTHS; corner-clear
+# runs go through scripts/pw-shop-languages.cjs. Widths: 1440, 1024, 820 (a tablet) and 390 where a check takes WIDTHS; corner-clear
 # 390-3840; circles in USD, AED, DKK and SAR (LONG=1 also stress-tests a long code in every circle).
 set -u
 export MSYS_NO_PATHCONV=1
@@ -24,7 +24,7 @@ KIT="${KIT:-$(cd "$(dirname "$0")/../.." && (pwd -W 2>/dev/null || pwd))/new-sho
 ROOT="$(cd "$(dirname "$0")/.." && (pwd -W 2>/dev/null || pwd))"
 mkdir -p "$OUT"
 WAIT=".ly .ftr"
-W3="${W3:-1440,1024,390}"
+W3="${W3:-1440,1024,820,390}"
 # Wide windows (the owner zoomed out to 2880 and 3840 CSS px, 15 Nov 2026): the layout checks also run there.
 WIDE="${WIDE:-1920,2560,2880,3840}"
 AREXT=()
@@ -66,7 +66,7 @@ run card-edge   env WIDTHS="$W3,$WIDE" node "$KIT/single-vendor-shop/card-edge-c
 run card-edge-ly-dark  env WIDTHS="$W3,$WIDE" STORAGE="$DARK"  node "$ROOT/scripts/card-edge-ly.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=$T_SEARCH" "$BASE/?filter=%7B%22only_has_discount%22%3Atrue%7D" "$BASE/blog" "$BASE/about-us" "$BASE/faq" "$BASE/contact-us" "$BASE/terms" "$BASE/privacy" "$BASE/user" "$BASE$CMP"
 run card-edge-ly-light env WIDTHS="$W3,$WIDE" STORAGE="$LIGHT" node "$ROOT/scripts/card-edge-ly.cjs" "$BASE/" "$BASE/#cat" "$BASE/?search=$T_SEARCH" "$BASE/blog" "$BASE/about-us" "$BASE/contact-us"
 run card-edge-ly-ar    env "${AREXT[@]}" WIDTHS="1440,390" STORAGE="$AR" node "$ROOT/scripts/card-edge-ly.cjs" "$BASE/" "$BASE/#cat" "$BASE/blog" "$BASE/about-us"
-run corner      env PAGES="$PAGES_MAIN" STORAGE="$DARK" WIDTHS="3840,2880,2560,1920,1440,1366,1280,1024,900,768,390" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
+run corner      env PAGES="$PAGES_MAIN" STORAGE="$DARK" WIDTHS="3840,2880,2560,1920,1440,1366,1280,1024,900,820,768,390" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
 run corner-ar   env "${AREXT[@]}" PAGES="$PAGES_MAIN" STORAGE="$AR" WIDTHS="1920,1366,1024,390" node "$KIT/single-vendor-shop/corner-clear-check.cjs" "$BASE" "$WAIT"
 run circle      env PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="$CUR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"
 run circle-ar   env "${AREXT[@]}" PAGES="$CIRCLE_PAGES" LONG=1 CURRENCIES="$CUR" STORAGE="$AR" node "$KIT/single-vendor-shop/circle-fit-check.cjs" "$BASE" "$WAIT"

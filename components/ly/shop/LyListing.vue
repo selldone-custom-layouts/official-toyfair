@@ -107,7 +107,7 @@
                 <h2>{{ t("tf.ls.goodFinds", "Good finds under {price}", { price: money(goodFinds.max, true) }) }}</h2>
                 <router-link :to="underAll(goodFinds.max)" class="tf-more">{{ t("tf.ls.seeAllUnder", "See them all") }}<ly-icon name="arrow" /></router-link>
               </div>
-              <div class="grid tf-grid">
+              <div :data-n="goodFinds.items.length" class="grid tf-grid tf-rail">
                 <ly-card v-for="p in goodFinds.items" :key="p.id" :product="p" />
               </div>
             </template>
@@ -363,7 +363,9 @@ export default {
       const steps = [10, 15, 20, 25, 30, 40, 50, 75, 100, 150, 200, 300, 500, 1000, 2000, 5000];
       const enough = Math.min(4, pool.length);
       const max = steps.find((m) => pool.filter((x) => x.now <= m).length >= enough) || Math.ceil(pool[enough - 1].now);
-      return { max, items: bySells(pool.filter((x) => x.now <= max).map((x) => x.p)).slice(0, 8) };
+      /* whole rows of four (8, else 4): no card alone in a row */
+      const found = bySells(pool.filter((x) => x.now <= max).map((x) => x.p));
+      return { max, items: found.slice(0, found.length >= 8 ? 8 : found.length >= 4 ? 4 : found.length) };
     },
     cat() {
       return this.ly.cats.find((c) => c.name === this.categoryName) || null;
@@ -721,7 +723,19 @@ export default {
       const cs = getComputedStyle(g);
       const cols = parseInt(cs.getPropertyValue("--ly-cols"), 10) || 5;
       const gap = parseFloat(cs.columnGap) || 0;
-      this.fitStyle = n && n < cols ? { gridTemplateColumns: `repeat(${n}, calc((100% - ${(cols - 1) * gap}px) / ${cols}))`, justifyContent: "start" } : null;
+      if (n && n < cols) {
+        this.fitStyle = { gridTemplateColumns: `repeat(${n}, calc((100% - ${(cols - 1) * gap}px) / ${cols}))`, justifyContent: "start" };
+        return;
+      }
+      /* (Toy Fair, 24 Nov 2026) one card alone in the last row (10 toys three to a row on a small tablet: 3+3+3+1):
+         one column more, or one fewer, when that leaves no card alone and the cards stay at least 150px wide (not on
+         a phone's two) */
+      let best = null;
+      if (cols >= 3 && n > cols && n % cols === 1) {
+        const width = g.clientWidth;
+        for (const c of [cols + 1, cols - 1]) if (c >= 3 && c <= 5 && n % c !== 1 && (width - (c - 1) * gap) / c >= 150) { best = c; break; }
+      }
+      this.fitStyle = best ? { gridTemplateColumns: `repeat(${best}, minmax(0, 1fr))` } : null;
     },
     /* Dim, say "Updating results…", then draw the new list fading up. */
     update() {

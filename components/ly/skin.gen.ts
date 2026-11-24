@@ -909,7 +909,24 @@ export const SKIN = {
       "tf.pd.viewDept": "عرض القسم",
       "ly.co.noWayHere": "لا تصل أي طريقة توصيل إلى هذا العنوان بعد. جرّب عنوانًا آخر، أو راسل المتجر.",
       "ly.co.noWayYet": "أضف عنوان التوصيل لترى كيف يمكن أن يصلك طلبك.",
-      "tf.bag.cod": "الدفع عند الاستلام"
+      "tf.bag.cod": "الدفع عند الاستلام",
+      "tf.way.truck": "توصيل {shop} بالشاحنة",
+      "tf.way.courierBy": "مندوب {shop} · {kind}",
+      "tf.way.k.motorbike": "دراجة نارية",
+      "tf.way.k.bicycle": "دراجة هوائية",
+      "tf.way.k.car": "سيارة",
+      "tf.way.k.drone": "طائرة مسيّرة",
+      "tf.way.k.walking": "سيرًا على الأقدام",
+      "tf.way.k.scooter": "سكوتر",
+      "tf.co.doorLater": "يظهر التوصيل إلى بابك هنا بعد إضافة عنوانك.",
+      "tf.co.doorAtCheckout": "يظهر التوصيل إلى بابك عند إتمام الطلب، بعد إضافة عنوانك.",
+      "tf.rt.pk.directions": "الاتجاهات",
+      "tf.rt.pk.newTab": "(تفتح خريطة في علامة تبويب جديدة)",
+      "tf.rt.pk.whenH": "متى تستلم",
+      "tf.rt.pk.windows": "فترات الاستلام",
+      "tf.rt.dl.anyDistance": "بلا حد للمسافة",
+      "tf.rd.pickupAt": "تنتظر الطلبات في {name}، {address}.",
+      "tf.ct.pickupH": "نقطة الاستلام"
     }
   }
 } as const;

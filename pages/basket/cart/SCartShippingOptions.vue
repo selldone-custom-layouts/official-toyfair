@@ -132,6 +132,8 @@
           : t("ly.co.noWayYet", "Add the delivery address to see how your order can reach you.")
       }}</span>
     </p>
+    <!-- Pickup is listed, the ways to the door come with the address (a courier's radius, a truck) -->
+    <p v-if="moreLater && (transportation_exclude_pickup?.length || pickups?.length)" class="cdlv-n ly-ship-more"><ly-icon name="pin" />{{ t("tf.co.doorLater", "Delivery to your door shows here once your address is in.") }}</p>
 
     <template v-if="transportation">
       <div v-if="windowsOn && timeItems.length && !dmShipSheet" class="wins">
@@ -180,7 +182,7 @@ import ProductMixin from "@selldone/components-vue/mixin/product/ProductMixin.ts
 import MapMixin from "@selldone/components-vue/mixin/map/MapMixin.ts";
 import LyIcon from "../../../components/ly/LyIcon.vue";
 import { shopWay, wayIcon } from "../../../components/ly/buy/ly-cart";
-import { openLine, shopFacts, wayTitle } from "../../../components/ly/ly";
+import { deliveryWays, openLine, pickupName, shopFacts, wayTitle } from "../../../components/ly/ly";
 
 /* The buyer's own delivery address, kept per basket while a pickup counter stands in for it (Selldone copies
    the counter into the receiver). Going back from the pickup to a delivery way brings it back, instead of an
@@ -251,6 +253,16 @@ export default defineComponent({
     /** The shop's pickup points for this package. */
     pickups() {
       return this.isPhysicalBasket ? this.pickup_transportation?.pickups || [] : [];
+    },
+    /** The shop has ways to the door this list does not offer yet, and no home address is in (none, or the pickup
+     *  counter in its place): they come with the address. With a home address in, a way missing does not reach it. */
+    moreLater() {
+      if (this.dmShipSheet) return false;
+      const listed = new Set((this.transportations || []).map((x) => x.type));
+      if (!deliveryWays(this.$shop).some((w) => !w.pickup && !listed.has(w.type))) return false;
+      const r = this.receiver_info || {};
+      const atCounter = !!r.address && this.pickups.some((p) => p.address === r.address);
+      return !(r.address && this.is_valid_location) || atCounter;
     },
     isPhysicalBasket() {
       return this.basket?.type === ProductType.PHYSICAL.code;
@@ -502,9 +514,11 @@ export default defineComponent({
     t,
     wayIcon,
     /* ── the Layout ── */
-    /* A pickup point's card title: the pickup way's own title, else "Pickup at <place>". */
+    /* A pickup point's card title: the pickup way's own title (one point), else the point's name ("Toychi Pickup ·
+       Bryant Park"; a name that does not say pickup: "Pickup at <name>"). */
     pickupTitle(pickup) {
-      return this.pickup_transportation?.title || t("bakini.way.pickupAt", "Pickup at {place}", { place: pickup.title || pickup.name || pickup.address });
+      if (this.pickup_transportation?.title && (this.pickups || []).length < 2) return this.pickup_transportation.title;
+      return pickupName(pickup);
     },
     wayTitleOf(item) {
       return item?.title || wayTitle(item, this.$shop);

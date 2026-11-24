@@ -57,7 +57,7 @@
 import LyIcon from "../../LyIcon.vue";
 import LyPt from "../../ui/LyPt.vue";
 import LyEmpty from "../../ui/LyEmpty.vue";
-import { loadDm, money } from "../../ly";
+import { isLocalWay, loadDm, money } from "../../ly";
 import { windowWord } from "../../buy/ly-cart";
 import { TF, canCollect, catalogueRoute, gateways, homeWays, pickupPoints, tfTo } from "../tf";
 import { locale, t } from "../../../kalio/i18n/kalio-i18n";
@@ -177,7 +177,8 @@ export default {
         });
       else out.push({ k: "fee", icon: "tag", text: w.fee ? t("tf.rt.dl.fee", "Delivery fee {fee}", { fee: money(w.fee) }) : t("tf.rt.dl.free", "Free delivery") });
       if (w.freeOver) out.push({ k: "over", icon: "gift", text: t("tf.rt.dl.freeOver", "Free on orders over {amount}", { amount: money(w.freeOver, true) }) });
-      if (w.distance > 0 && !["Global", "Post"].includes(w.type)) out.push({ k: "km", icon: "pin", text: t("tf.rt.dl.within", "Within {n} km of the shop", { n: w.distance }) });
+      if (w.distance > 0 && !["Global", "Post"].includes(w.type))
+        out.push({ k: "km", icon: "pin", text: isLocalWay(w) ? t("tf.rt.dl.within", "Within {n} km of the shop", { n: w.distance }) : t("tf.rt.dl.anyDistance", "No distance limit") });
       if (w.cod) out.push({ k: "cod", icon: "cash", text: t("tf.rt.dl.cod", "Pay on delivery available") });
       if (w.windows.length) out.push({ k: "win", icon: "clock", text: t("tf.rt.dl.windows", "Delivery windows: {list}", { list: listOf(w.windows.map(windowWord)) }) });
       if (w.days.length)

@@ -1,9 +1,10 @@
 <!--
   Toy Fair: the pickup finder (route TfPickupFinder, design toy-fair stores.html) and one pickup point's page (route
   TfPickupPoint, design store.html). Only the shop's own pickup points (every enabled Pickup way's points): their
-  name, address, phone and the merchant's own message, as written. Opening hours show only when the point's own
-  words carry them; "How collection works" says only what checkout does. A shop without pickup points, or an
-  unknown point, gets an honest empty state.
+  name, address, phone and the merchant's own message, as written; on the point's page its place on a map (the
+  point's own location, LyMap) with directions, and when to collect: the Pickup way's own days and windows (hours
+  only when the point's own words carry them). "How collection works" says only what checkout does. A shop without
+  pickup points, or an unknown point, gets an honest empty state.
 -->
 <template>
   <div class="ly tf-page tf-rt">
@@ -11,35 +12,48 @@
     <template v-if="isPoint">
       <ly-pt :crumbs="[{ label: finderTitle, to: finderTo }, { label: pointTitle }]" :lead="pointLead" :title="pointTitle" cls="compact" />
       <div class="wrap">
-        <div v-if="point" class="tf-rt-point">
+        <div v-if="point" :class="['tf-rt-point', { 'no-map': !point.location }]">
           <article class="tf-rt-panel tf-rt-pick">
             <span class="tf-sym"><ly-icon name="pin" /></span>
             <div class="tf-rt-pick-tx">
               <h2 class="tf-rt-pick-h"><bdi>{{ point.name }}</bdi></h2>
               <p v-if="point.where"><bdi>{{ point.where }}</bdi></p>
             </div>
-            <div v-if="point.phone" class="tf-rt-pick-acts">
-              <a :href="'tel:' + point.tel" class="btn quiet"><ly-icon name="phone" /><bdi dir="ltr">{{ point.phone }}</bdi></a>
+            <div v-if="point.phone || point.directions" class="tf-rt-pick-acts">
+              <a v-if="point.phone" :href="'tel:' + point.tel" class="btn quiet"><ly-icon name="phone" /><bdi dir="ltr">{{ point.phone }}</bdi></a>
+              <a v-if="point.directions" :href="point.directions" class="btn quiet" rel="noopener" target="_blank"
+                ><ly-icon name="pin" />{{ t("tf.rt.pk.directions", "Directions") }}<span class="sr">{{ t("tf.rt.pk.newTab", "(opens a map in a new tab)") }}</span></a
+              >
             </div>
           </article>
-          <section v-if="point.hours" aria-labelledby="tf-rt-hours-h" class="tf-rt-panel">
-            <h2 id="tf-rt-hours-h" class="tf-rt-box-h">{{ t("tf.rt.pk.hoursH", "Opening hours") }}</h2>
-            <dl class="tf-rt-hours">
-              <div v-if="point.days">
-                <dt>{{ t("tf.rt.pk.days", "Pickup days") }}</dt>
-                <dd class="tf-rt-wrap">{{ point.days }}</dd>
-              </div>
-              <div>
-                <dt>{{ t("tf.rt.pk.hours", "Hours") }}</dt>
-                <dd><bdi dir="ltr">{{ point.hours }}</bdi></dd>
-              </div>
-            </dl>
-          </section>
-          <section v-if="point.message" aria-labelledby="tf-rt-msg-h" class="tf-rt-panel">
-            <h2 id="tf-rt-msg-h" class="tf-rt-box-h">{{ t("tf.rt.pk.msgH", "From the shop") }}</h2>
-            <p class="tf-rt-own"><bdi>{{ point.message }}</bdi></p>
-          </section>
-          <section aria-labelledby="tf-rt-how-h" class="tf-rt-panel">
+          <!-- The point's own place on a map (Selldone's map service; LyMap), its pin in the middle -->
+          <div v-if="point.location" class="tf-rt-panel tf-rt-mapbox">
+            <ly-map :line="point.where" :location="point.location" :title="point.name" :zoom="15" />
+          </div>
+          <div class="tf-rt-side">
+            <section v-if="point.days || point.windows || point.hours" aria-labelledby="tf-rt-hours-h" class="tf-rt-panel">
+              <h2 id="tf-rt-hours-h" class="tf-rt-box-h">{{ t("tf.rt.pk.whenH", "When to collect") }}</h2>
+              <dl class="tf-rt-hours">
+                <div v-if="point.days">
+                  <dt>{{ t("tf.rt.pk.days", "Pickup days") }}</dt>
+                  <dd class="tf-rt-wrap">{{ point.days }}</dd>
+                </div>
+                <div v-if="point.windows">
+                  <dt>{{ t("tf.rt.pk.windows", "Pickup windows") }}</dt>
+                  <dd class="tf-rt-wrap">{{ point.windows }}</dd>
+                </div>
+                <div v-if="point.hours">
+                  <dt>{{ t("tf.rt.pk.hours", "Hours") }}</dt>
+                  <dd><bdi dir="ltr">{{ point.hours }}</bdi></dd>
+                </div>
+              </dl>
+            </section>
+            <section v-if="point.message" aria-labelledby="tf-rt-msg-h" class="tf-rt-panel">
+              <h2 id="tf-rt-msg-h" class="tf-rt-box-h">{{ t("tf.rt.pk.msgH", "From the shop") }}</h2>
+              <p class="tf-rt-own"><bdi>{{ point.message }}</bdi></p>
+            </section>
+          </div>
+          <section aria-labelledby="tf-rt-how-h" class="tf-rt-panel tf-rt-how">
             <h2 id="tf-rt-how-h" class="tf-rt-box-h">{{ t("tf.rt.pk.howH", "How collection works") }}</h2>
             <ol class="tf-rt-steps">
               <li>{{ t("tf.rt.pk.step1", "Add the toys you want to your basket and go to checkout.") }}</li>
@@ -81,6 +95,7 @@
                 <div class="tf-rt-pick-tx">
                   <h2 class="tf-rt-pick-h"><bdi>{{ p.name }}</bdi></h2>
                   <p v-if="p.where"><bdi>{{ p.where }}</bdi></p>
+                  <p v-if="p.message" class="tf-rt-pick-note"><bdi>{{ p.message }}</bdi></p>
                 </div>
                 <div class="tf-rt-pick-acts">
                   <router-link :aria-label="t('tf.rt.pk.detailsOf', 'View details of {name}', { name: p.name })" :to="p.to" class="btn quiet">{{ t("tf.rt.pk.details", "View details") }}</router-link>
@@ -108,7 +123,9 @@
 import LyIcon from "../../LyIcon.vue";
 import LyPt from "../../ui/LyPt.vue";
 import LyEmpty from "../../ui/LyEmpty.vue";
+import LyMap from "../../read/LyMap.vue";
 import { hoursFrom, loadDm } from "../../ly";
+import { windowWord } from "../../buy/ly-cart";
 import { TF, catalogueRoute, pickupPoints, tfTo } from "../tf";
 import { locale, t } from "../../../kalio/i18n/kalio-i18n";
 
@@ -140,7 +157,7 @@ function pointWhere(p) {
 
 export default {
   name: "TfPickups",
-  components: { LyIcon, LyPt, LyEmpty },
+  components: { LyIcon, LyPt, LyEmpty, LyMap },
   data: () => ({ q: "" }),
   computed: {
     shop() {
@@ -156,6 +173,9 @@ export default {
         const message = String(p.message || "").trim();
         const hours = hoursFrom(message);
         const days = (p._way?.days || []).filter((d) => WEEK.includes(d));
+        const at = p.location && Number(p.location.lat) && Number(p.location.lng) ? { lat: Number(p.location.lat), lng: Number(p.location.lng) } : null;
+        /* the Pickup way's own windows (Selldone's parts of the day), by the names checkout uses */
+        const wins = (Array.isArray(p._way?.windows) ? p._way.windows : []).map(windowWord).filter(Boolean);
         return {
           key,
           name: String(p.title || p.name || "").trim() || t("tf.rt.pk.unnamed", "Pickup point"),
@@ -167,6 +187,10 @@ export default {
           hours,
           /* the Pickup way's own days (Selldone's days for that way), shown beside the hours the point's words give */
           days: !days.length ? "" : days.length >= 7 ? t("tf.rt.pk.everyDay", "Every day") : listOf(WEEK.filter((d) => days.includes(d)).map(dayName)),
+          windows: wins.length ? listOf(wins) : "",
+          location: at,
+          /* directions to the point's own place (a public map, in a new tab) */
+          directions: at ? `https://www.google.com/maps/dir/?api=1&destination=${at.lat},${at.lng}` : "",
           search: [p.title, p.name, p.address, p.city, p.state, p.postal, p.country].filter(Boolean).join(" ").toLowerCase(),
           to: tfTo(TF.PICKUP, undefined, { point_id: key }),
         };

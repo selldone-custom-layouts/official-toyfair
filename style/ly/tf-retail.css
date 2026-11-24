@@ -79,8 +79,15 @@
 .ly.tf-rt .tf-rt-pick-acts { display: flex; flex-wrap: wrap; gap: 6px; }
 .ly.tf-rt .tf-rt-pick-acts .btn .i { width: 17px; height: 17px; }
 .ly.tf-rt .tf-rt-none { margin-top: 8px; color: var(--ly-muted); }
-.ly.tf-rt .tf-rt-point { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-.ly.tf-rt .tf-rt-point > .tf-rt-pick, .ly.tf-rt .tf-rt-point > section:last-child:nth-child(even) { grid-column: 1 / -1; }
+.ly.tf-rt .tf-rt-pick-tx .tf-rt-pick-note { margin-top: 6px; font-size: 14px; color: var(--ly-ink); }
+/* a point: its card, then its map beside when to collect and the shop's words, then how collection works */
+.ly.tf-rt .tf-rt-point { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 12px; align-items: stretch; }
+.ly.tf-rt .tf-rt-point > .tf-rt-pick, .ly.tf-rt .tf-rt-point > .tf-rt-how { grid-column: 1 / -1; }
+.ly.tf-rt .tf-rt-side { display: grid; align-content: start; gap: 12px; min-width: 0; }
+.ly.tf-rt .tf-rt-side:empty { display: none; }
+.ly.tf-rt .tf-rt-point.no-map > .tf-rt-side { grid-column: 1 / -1; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.ly.tf-rt .tf-rt-mapbox { position: relative; min-height: 300px; padding: 0; overflow: hidden; }
+.ly.tf-rt .tf-rt-mapbox .ly-map { position: absolute; inset: 0; border-radius: inherit; }
 .ly.tf-rt .tf-rt-box-h { margin-bottom: 8px; font: 700 20.8px/1.15 var(--ly-serif); letter-spacing: -.01em; color: var(--ly-ink); }
 .ly.tf-rt .tf-rt-hours > div { display: flex; justify-content: space-between; gap: 12px; padding-block: 9px; border-bottom: 1px solid var(--ly-line); }
 .ly.tf-rt .tf-rt-hours > div:last-child { border-bottom: 0; }
@@ -140,13 +147,17 @@
 }
 @media (max-width: 1050px) and (min-width: 601px) {
   .ly.tf-rt .tf-rt-topics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* an odd last topic takes the whole row (11 topics: never one alone beside an empty cell) */
+  .ly.tf-rt .tf-rt-topics > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
+@media (min-width: 1051px) { .ly.tf-rt .tf-rt-topics > li:last-child:nth-child(3n + 1) { grid-column: 1 / -1; } }
 @media (max-width: 800px) {
   .ly.tf-rt .tf-rt-svc, .ly.tf-rt .tf-rt-gift { grid-template-columns: minmax(0, 1fr); }
   .ly.tf-rt .tf-rt-ages-h { font-size: 30px; }
 }
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .ly.tf-rt .tf-rt-point { grid-template-columns: minmax(0, 1fr); }
+  .ly.tf-rt .tf-rt-mapbox { min-height: 0; aspect-ratio: 1.6; }
 }
 @media (max-width: 600px) {
   .ly.tf-rt > .wrap:last-child { padding-bottom: 16px; }

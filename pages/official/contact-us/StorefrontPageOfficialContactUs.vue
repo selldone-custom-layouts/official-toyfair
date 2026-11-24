@@ -26,6 +26,15 @@
           </p>
           <p v-if="f.pickupNote" class="ci-s">{{ f.pickupNote }}</p>
         </article>
+        <!-- No address of its own: the pickup point, named as one (Toychi: orders wait at Bryant Park) -->
+        <article v-else-if="f.pickupPoint" class="ci-c">
+          <ly-art cls="ci-ic" name="cake" />
+          <h2 class="ci-t">{{ t("tf.ct.pickupH", "Pickup point") }}</h2>
+          <p>
+            <b><bdi>{{ f.pickupPoint.name }}</bdi></b><br /><bdi>{{ street }}</bdi><br /><bdi>{{ pointCity }}</bdi>
+          </p>
+          <p v-if="f.pickupNote" class="ci-s">{{ f.pickupNote }}</p>
+        </article>
         <article v-if="f.phone || f.email" class="ci-c">
           <ly-art cls="ci-ic" name="cupcake" />
           <h2 class="ci-t">{{ f.phone && f.email ? t("ly.rd.callWrite", "Call or write") : f.phone ? t("ly.rd.call", "Call") : t("ly.rd.write", "Write") }}</h2>
@@ -55,7 +64,7 @@
         </header>
         <div class="ct-g">
           <div class="ct-map">
-            <div class="ct-mbox"><ly-map :line="street" :location="f.location" :title="name" /></div>
+            <div class="ct-mbox"><ly-map :line="street" :location="mapAt" :title="name" /></div>
             <p v-if="street" class="ct-cap">
               <ly-icon name="pin" /><span
                 ><b><bdi>{{ street }}</bdi></b
@@ -159,6 +168,15 @@ export default {
     },
     street() {
       return streetOf(this.f);
+    },
+    /* the shop's own place, else its pickup point's (the caption under the map names the point) */
+    mapAt() {
+      const l = this.f.location || this.f.pickupPoint?.location;
+      return l && Number(l.lat) && Number(l.lng) ? l : null;
+    },
+    pointCity() {
+      const p = this.f.pickupPoint || {};
+      return [p.city, [p.state, p.postal].filter(Boolean).join(" ")].filter(Boolean).join(", ");
     },
     cityLine() {
       return [cityLine(this.f), this.f.country].filter(Boolean).join(", ");

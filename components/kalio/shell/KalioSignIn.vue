@@ -122,7 +122,7 @@ import { throttle } from "lodash-es";
 import SShopLogin from "@selldone/components-vue/storefront/login/SShopLogin.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
 import LyIcon from "../../ly/LyIcon.vue";
-import { guestCheckout, shopFacts } from "../../ly/ly";
+import { guestCheckout, lockPage, shopFacts } from "../../ly/ly";
 import { isRtl } from "../../region-switcher/region";
 import { t } from "../i18n/kalio-i18n";
 
@@ -202,7 +202,7 @@ export default {
   watch: {
     show(value) {
       this.$store.commit("setForceHideNavigation", value);
-      document.documentElement.style.overflow = value ? "hidden" : "";
+      lockPage(!!value);
       if (value) {
         this.step = "start";
         this.codeErr = "";

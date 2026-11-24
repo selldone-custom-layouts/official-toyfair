@@ -9,7 +9,7 @@
         <h2 id="tf-guides-h">{{ t("tf.home.guidesH", "The {shop} play guide", { shop: shopName }) }}</h2>
         <router-link :to="blogTo" class="tf-more">{{ t("tf.home.allGuides", "See all guides") }}<ly-icon name="arrow" /></router-link>
       </div>
-      <ul class="tf-guides">
+      <ul :data-n="posts.length" class="tf-guides">
         <li v-for="b in posts" :key="b.id">
           <router-link :to="postRoute(b)" class="tf-guide">
             <span class="tf-guide-ph"><img v-if="b.image" :src="cover(b)" alt="" loading="lazy" /></span>

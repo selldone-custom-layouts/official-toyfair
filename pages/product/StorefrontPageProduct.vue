@@ -52,7 +52,7 @@
             <h2 id="more-h">{{ t("tf.pd.similar", "Similar toys") }}</h2>
             <router-link v-if="cat" :to="catTo(cat)" class="tf-more">{{ t("tf.pd.viewDept", "View department") }}<ly-icon name="arrow" /></router-link>
           </div>
-          <div class="tf-grid">
+          <div :data-n="Math.min(more.length, 4)" class="tf-grid tf-rail">
             <ly-card v-for="p in more.slice(0, 4)" :key="p.id" :product="p" />
           </div>
         </div>

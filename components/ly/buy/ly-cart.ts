@@ -18,7 +18,7 @@
  */
 import { ShopTransportations } from "@selldone/core-js/enums/logistic/ShopTransportations";
 import { ETA } from "@selldone/core-js/enums/logistic/ETA.ts";
-import { catImage, catOf, catTitle, catTo, closeLayer, hueOf, layer, loadDm, ly, bySells, openLayer, shopFacts, unitOf, productTo, wayTitle } from "../ly";
+import { catImage, catOf, catTitle, catTo, closeLayer, deliveryWays, hueOf, layer, loadDm, ly, bySells, openLayer, shopFacts, unitOf, productTo, wayTitle } from "../ly";
 import { catalogueRoute } from "../../kalio/kalio-catalog";
 import { shownCount, stepTo } from "../../kalio/kalio-basket";
 import { productImage } from "../../kalio/kalio-catalog";
@@ -289,6 +289,12 @@ export default {
       if (!way) return false;
       if (way.type === ShopTransportations.Pickup.code) return true;
       return !(Number(way.const) > 0) && !(Number(way.distance_rate) > 0) && !(Number(way.weight_rate) > 0);
+    },
+    /* The shop has ways to the door the bag does not list yet (a courier's radius, a truck): they come with the
+       address at checkout. */
+    nx_more_later(this: any): boolean {
+      const listed = new Set((this.transportation_list || []).map((w: any) => w.type));
+      return deliveryWays(this.$shop).some((w: any) => !w.pickup && !listed.has(w.type));
     },
     /* The bag's delivery ways in the checkout's order: the ways, then pickup. */
     nx_ways_in_order(this: any): any[] {

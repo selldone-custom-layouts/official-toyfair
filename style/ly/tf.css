@@ -127,7 +127,7 @@
 .tf-dd-in { padding-block: 18px 22px; }
 .tf-dd-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 .ly .tf-dd-h .dd-h { margin: 0; font-size: 18px; font-weight: 850; letter-spacing: -.02em; color: var(--ly-ink); text-transform: none; }
-.tf-dd-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 6px; }
+.tf-dd-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px; }
 .tf-dd-list a { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: center; gap: 12px; padding: 6px; border-radius: var(--ly-r-in); color: var(--ly-ink); }
 .tf-dd-list a:hover { background: var(--ly-act-soft); color: var(--ly-ink); }
 .tf-dd-list .dd-th { width: 52px; height: 52px; border-radius: var(--ly-r-in); background: var(--ly-act-soft); overflow: hidden; display: grid; place-items: center; }
@@ -240,16 +240,30 @@
 .ly .tf-buy .qb button:hover { background: var(--ly-act-deep); }
 .ly .tf-buy .qb .i { width: 16px; height: 16px; }
 .ly .tf-buy .qn { text-align: center; font-weight: 800; font-size: 13.5px; white-space: nowrap; overflow: hidden; }
-@container tfcard (max-width: 200px) { .tf-card .qn-w { display: none; } .tf-card .tf-buy { padding-inline: 8px; } .tf-card .tf-info { padding-inline: 8px; } }
+@container tfcard (max-width: 200px) {
+  .tf-card .qn-w { display: none; }
+  .tf-card .tf-buy { padding-inline: 8px; }
+  .tf-card .tf-info { padding-inline: 8px; }
+  /* a small card (a phone, four to a row on a tablet): the heart smaller and tight in its corner, off the toy */
+  .ly .tf-card .tf-heart { top: 6px; inset-inline-end: 6px; width: 30px; height: 30px; }
+  .ly .tf-card .tf-heart .i { width: 15px; height: 15px; }
+}
 @media (max-width: 600px) {
   .ly .tf-card .pc-t { font-size: 14px; }
   .ly .tf-qv { width: 32px; height: 32px; }
 }
 
-/* one grid for every list of cards: 4 to a row (the design), 3 on a tablet, 2 on a phone */
+/* one grid for every list of cards (the design's .products-grid): 4 to a row down to 801px, 3 on a small tablet,
+   2 on a phone. A rail of four (the home's shelves, similar toys, good finds) stays four to a row on every tablet and
+   two by two on a phone, so no card is left alone in a row (Play Lab at 800px: 3 + 1); a rail of three on a phone
+   shows two. */
 .ly .tf-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; --ly-cols: 4; }
-@media (max-width: 1050px) { .ly .tf-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; --ly-cols: 3; } }
-@media (max-width: 600px) { .ly .tf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; --ly-cols: 2; } }
+@media (max-width: 1050px) { .ly .tf-grid { gap: 10px; } }
+@media (max-width: 800px) { .ly .tf-grid:not(.tf-rail) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; --ly-cols: 3; } }
+@media (max-width: 600px) {
+  .ly .tf-grid, .ly .tf-grid.tf-rail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; --ly-cols: 2; }
+  .ly .tf-rail[data-n="3"] > :nth-child(3) { display: none; }
+}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ The home ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .ly .tf-sec { padding-block: 26px; }
@@ -297,7 +311,8 @@
 [dir="rtl"] .tf-budgets .i, .ly[dir="rtl"] .tf-budgets .i { transform: scaleX(-1); }
 
 .tf-guides { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-@media (max-width: 1050px) { .tf-guides { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* a tablet: two by two (three guides: three across), never one alone in a row */
+@media (max-width: 1050px) { .tf-guides { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tf-guides[data-n="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .tf-guides { grid-template-columns: minmax(0, 1fr); } }
 .ly .tf-guide { display: grid; grid-template-rows: auto 1fr; height: 100%; padding: 9px; border-radius: var(--ly-r-pn); background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line); color: var(--ly-ink); }
 .tf-guide-ph { display: block; aspect-ratio: 1.6; overflow: hidden; border-radius: var(--ly-r-in); background: var(--ly-band); }
@@ -318,13 +333,13 @@
 [dir="rtl"] .tf-help-a .chev { transform: scaleX(-1); }
 
 @media (max-width: 1050px) {
-  .tf-dept-tiles { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  /* the departments in two even rows (10: 5 + 5) */
+  .tf-dept-tiles { grid-template-columns: repeat(var(--half, 5), minmax(0, 1fr)); }
   .tf-hero-in { min-height: 320px; }
 }
 @media (max-width: 800px) {
   .tf-hero-in { min-height: 266px; }
   .tf-hero-copy { padding: 18px; }
-  .tf-ages { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
   .tf-hero { padding-block: 10px; }
@@ -337,6 +352,8 @@
   .tf-dept-tiles { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 6px; padding-bottom: 4px; scrollbar-width: none; }
   .tf-dept-tiles li { flex: 0 0 96px; scroll-snap-align: start; }
   .tf-ages, .tf-budgets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* an odd last age or budget takes the whole row (7 ages: 2 + 2 + 2 + 1 wide) */
+  .tf-ages > li:last-child:nth-child(odd), .tf-budgets > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .tf-help-grid { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .tf-promo-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
   .tf-promo-tx { padding: 8px 12px; font-size: 13px; }
@@ -388,3 +405,15 @@
 
 /* the wordmark keeps its own direction in Arabic (a Latin name stays "toychi." with the dot after it) */
 .ly-wm .wm-name { unicode-bidi: plaintext; }
+
+/* the page stops scrolling behind a side panel or a sheet (ly.ts lockPage): Selldone's own html { overflow: auto
+   !important } beats an inline style, this class beats it */
+html.ly-lock { overflow: hidden !important; }
+
+/* "Often added" and the 404's six toys (grid.six): three to a row up to 1200px, so a photo never shrinks below a
+   phone's (six to a row at 1024 made them 133px) */
+@media (min-width: 601px) and (max-width: 1200px) { .ly .grid.six { grid-template-columns: repeat(3, minmax(0, 1fr)); --ly-cols: 3; } }
+
+/* a panel or a sheet that scrolls (a long filter list, the address form on a short screen): a thin track in the
+   family's line colour, dark in dark mode, not the system's wide grey one */
+.ly-layers :is(.panel, .modal, .ly-sheet, .md-body), .ly .fp.panel, .k-addr__form, .k-sheet { scrollbar-width: thin; scrollbar-color: var(--ly-line-2) transparent; }

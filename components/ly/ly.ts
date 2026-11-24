@@ -189,19 +189,51 @@ export interface DeliveryWay {
 
 const COURIER = ["Motorbike", "Bicycle", "Car", "Truck", "Drone", "Walking", "Scooter"];
 
-/** A delivery way's name: the merchant's own title, else words from its kind. */
+/** A pickup point's name as a way's name: the point's own name when it already says pickup ("Toychi Pickup · Bryant
+    Park"), else "Pickup at <name>". */
+export function pickupName(p: any): string {
+  const n = String(p?.title || p?.name || "").trim();
+  if (!n) return p?.address ? t("bakini.n.way.pickupAt", "Pickup at {place}", { place: p.address }) : t("bakini.n.way.pickup", "Pickup");
+  return /pickup|collect|استلام/i.test(n) ? n : t("bakini.n.way.pickupAt", "Pickup at {place}", { place: n });
+}
+
+/* the vehicle, when the shop runs two couriers without titles (a motorbike in town, a car) */
+const KIND: Record<string, [string, string]> = {
+  Motorbike: ["tf.way.k.motorbike", "motorbike"],
+  Bicycle: ["tf.way.k.bicycle", "bicycle"],
+  Car: ["tf.way.k.car", "car"],
+  Drone: ["tf.way.k.drone", "drone"],
+  Walking: ["tf.way.k.walking", "on foot"],
+  Scooter: ["tf.way.k.scooter", "scooter"],
+};
+
+/** A delivery way's name: the merchant's own title, else words from its kind. A truck is the shop's truck delivery
+    (beside a courier in town: Toychi, 24 Nov 2026); two untitled couriers are told apart by their vehicle. */
 export function wayTitle(tr: any, shop: any): string {
   if (tr?.title) return tr.title;
   const raw = String(shop?.title || "");
   const name = raw.charAt(0).toUpperCase() + raw.slice(1);
   if (tr?.type === "Pickup") {
-    const p = (tr.pickups || [])[0];
-    return p?.name ? t("bakini.n.way.pickupAt", "Pickup at {place}", { place: p.name }) : t("bakini.n.way.pickup", "Pickup");
+    const p = (tr.pickups || shop?.transportations?.find((x: any) => x?.type === "Pickup")?.pickups || [])[0];
+    return p ? pickupName(p) : t("bakini.n.way.pickup", "Pickup");
   }
-  if (COURIER.includes(tr?.type)) return t("bakini.n.way.courier", "{shop} courier", { shop: name });
+  if (tr?.type === "Truck") return t("tf.way.truck", "{shop} truck delivery", { shop: name });
+  if (COURIER.includes(tr?.type)) {
+    const others = (shop?.transportations || []).filter((x: any) => x && x.enable !== false && !x.title && x.type !== "Truck" && COURIER.includes(x.type));
+    const k = KIND[tr.type];
+    if (others.length > 1 && k) return t("tf.way.courierBy", "{shop} courier · {kind}", { shop: name, kind: t(k[0], k[1]) });
+    return t("bakini.n.way.courier", "{shop} courier", { shop: name });
+  }
   if (tr?.type === "Global") return t("bakini.n.way.worldwide", "Worldwide shipping");
   if (tr?.type === "Post") return t("bakini.n.way.post", "By post");
   return t("bakini.n.way.delivery", "Delivery");
+}
+
+/** A way limited to a real radius around the shop (a courier in town). Selldone's "no limit" is a very large one
+    (99999 km). */
+export function isLocalWay(w: any): boolean {
+  const d = Number(w?.distance) || 0;
+  return d > 0 && d < 1000;
 }
 
 export function deliveryWays(shop: any): DeliveryWay[] {
@@ -276,20 +308,27 @@ export function shopFacts(shop: any): ShopFacts {
   return {
     ready,
     title: shop?.title || "",
-    address: info.address || (point ? [point.address, point.city].filter(Boolean).join(", ") : ""),
-    city: info.locality || point?.city || "",
-    region: info.region || point?.state || "",
-    postal: info.postal_code || point?.postal || "",
+    /* the shop's own address only: a pickup point is where orders wait, not where the shop is (Toychi, 24 Nov 2026:
+       with the Bryant Park point the About page called Toychi "a toy shop at Bryant Park"); the point is pickupPoint */
+    address: info.address || "",
+    city: info.locality || "",
+    region: info.region || "",
+    postal: info.postal_code || "",
     country: info.country || "",
-    phone: info.phone || point?.phone || "",
+    phone: info.phone || "",
     email: info.email || "",
     days: WEEK.filter((d) => days.includes(d)),
     everyDay: days.length > 0 && WEEK.every((d) => days.includes(d)),
     hours: ready ? hoursFrom(note) || hoursFrom(info.hours || "") : "",
-    location: info.location?.lat ? info.location : point?.location?.lat ? point.location : null,
+    location: info.location?.lat ? info.location : null,
     ways,
-    courier: ways.find((w) => COURIER.includes(w.type)) || null,
-    shipping: ways.find((w) => w.type === "Global" || w.type === "Post") || null,
+    /* the courier in town (a real radius) first; a courier way without one (Selldone's "no limit" is 99999 km, a
+       truck) is how the shop ships further away when it has no post (Toychi, 24 Nov 2026) */
+    courier: ways.find((w) => COURIER.includes(w.type) && isLocalWay(w)) || ways.find((w) => COURIER.includes(w.type)) || null,
+    shipping:
+      ways.find((w) => w.type === "Global" || w.type === "Post") ||
+      ways.find((w) => COURIER.includes(w.type) && !isLocalWay(w) && w !== (ways.find((x) => COURIER.includes(x.type) && isLocalWay(x)) || ways.find((x) => COURIER.includes(x.type)))) ||
+      null,
     pickup,
     pickupPoint: point,
     pickupNote: note,
@@ -319,19 +358,28 @@ let opener: HTMLElement | null = null;
 const MODAL = new Set(["drawer", "qv", "langsheet", "fsheet", "menu", "mapm", "dlvm", "paym", "loginm", "cmp-pick"]);
 const isModalId = (id: string) => MODAL.has(id) || /^fp-/.test(id);
 
+/** The page behind a side panel or a sheet stops scrolling. Selldone's own sheet sets html { overflow: auto
+    !important }, which an inline style cannot beat, so a class does it (tf.css: html.ly-lock): without it the page
+    scrolled behind the bag and kept its scroll bar beside the panel (Toy Fair tablet pass, 24 Nov 2026). */
+export function lockPage(on: boolean): void {
+  const d = document.documentElement;
+  d.style.overflow = on ? "hidden" : "";
+  d.classList.toggle("ly-lock", on);
+}
+
 /** Open a layer by id; the button that opened it gets focus back on close. */
 export function openLayer(id: string, btn?: HTMLElement | null): void {
   if (layer.open && layer.open !== id) closeLayer(true);
   layer.open = id;
   opener = btn || (document.activeElement as HTMLElement) || null;
-  if (isModalId(id)) document.documentElement.style.overflow = "hidden";
+  if (isModalId(id)) lockPage(true);
 }
 
 export function closeLayer(silent = false): void {
   if (!layer.open) return;
   const was = layer.open;
   layer.open = "";
-  document.documentElement.style.overflow = "";
+  lockPage(false);
   if (!silent && opener && opener.focus) {
     try {
       opener.focus({ preventScroll: true });
@@ -342,7 +390,7 @@ export function closeLayer(silent = false): void {
   /* The language sheet came from the phone menu: back to the menu. */
   if (was === "langsheet" && window.innerWidth <= 979) {
     layer.open = "menu";
-    document.documentElement.style.overflow = "hidden";
+    lockPage(true);
   }
 }
 

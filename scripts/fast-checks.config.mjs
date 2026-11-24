@@ -32,7 +32,7 @@ const BASE = (process.env.BASE || FC.live).replace(/\/$/, "");
 const SK = FC.storage.theme;
 const SHOP = FC.shop;
 const BRAND = FC.brand;
-const W3 = widths("1440,1024,390");
+const W3 = widths("1440,1024,820,390");
 const WIDE = widths("1920,2560,2880,3840");
 const DARK = theme(BRAND, "dark");
 const LIGHT = theme(BRAND, "light");
@@ -64,7 +64,7 @@ const runs = [
   { name: "card-edge-ly-dark", check: "card-edge", theme: DARK, widths: [...W3, ...WIDE], urls: CARD_URLS_DARK },
   { name: "card-edge-ly-light", check: "card-edge", theme: LIGHT, widths: [...W3, ...WIDE], urls: ["/", "/#cat", `/?search=${Q}`, "/blog", "/about-us", "/contact-us"] },
   { name: "card-edge-ly-ar", check: "card-edge", lang: "ar", widths: widths("1440,390"), urls: ["/", "/#cat", "/blog", "/about-us"] },
-  { name: "corner", check: "corner", theme: DARK, pages: pages(PAGES_MAIN), widths: widths("3840,2880,2560,1920,1440,1366,1280,1024,900,768,390") },
+  { name: "corner", check: "corner", theme: DARK, pages: pages(PAGES_MAIN), widths: widths("3840,2880,2560,1920,1440,1366,1280,1024,900,820,768,390") },
   { name: "corner-ar", check: "corner", lang: "ar", pages: pages(PAGES_MAIN), widths: widths("1920,1366,1024,390") },
   { name: "circle", check: "circle", pages: pages(CIRCLE_PAGES), long: true, currencies: CUR },
   { name: "circle-ar", check: "circle", lang: "ar", pages: pages(CIRCLE_PAGES), long: true, currencies: CUR },
@@ -84,7 +84,7 @@ const runs = [
   { name: "contrast-ar-dark", check: "contrast", lang: "ar", theme: DARK, pages: pages(PAGES_MAIN) },
   { name: "cart-dark", check: "cart", theme: DARK, env: { SHOP, WAIT: ".ly .ftr", CART: ".bag-btn", STORAGE_KEY: SK }, argv: [BASE, BRAND, "dark"] },
   { name: "cart-light", check: "cart", theme: LIGHT, env: { SHOP, WAIT: ".ly .ftr", CART: ".bag-btn", STORAGE_KEY: SK }, argv: [BASE, BRAND, "light"] },
-  { name: "currency", check: "currency", widths: W3, env: { WIDTHS: "1440,1024,390", SHOP, MENU: ".menu-btn", MEGA: "[aria-controls=dd-shop]", CART: ".bag-btn >> visible=true", CATEGORY: CAT, DEALS } },
+  { name: "currency", check: "currency", widths: W3, env: { WIDTHS: "1440,1024,820,390", SHOP, MENU: ".menu-btn", MEGA: "[aria-controls=dd-shop]", CART: ".bag-btn >> visible=true", CATEGORY: CAT, DEALS } },
   { name: "box-dark", check: "box", theme: DARK, widths: [...W3, ...WIDE], pages: pages(BOX_PAGES, "first"), states: true },
   { name: "box-light", check: "box", theme: LIGHT, widths: [...W3, ...WIDE], pages: pages(BOX_PAGES, "first"), states: true },
   { name: "box-ar", check: "box", lang: "ar", widths: widths("1440,390"), pages: pages(BOX_PAGES, "first"), states: false },

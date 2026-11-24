@@ -13,7 +13,7 @@
         <h2 :id="hid"><bdi>{{ title }}</bdi></h2>
         <router-link :to="moreTo" class="tf-more">{{ moreLabel }}<ly-icon name="arrow" /></router-link>
       </div>
-      <div class="tf-grid">
+      <div :data-n="items.length" class="tf-grid tf-rail">
         <ly-card v-for="p in items" :key="p.id" :product="p" />
       </div>
     </div>

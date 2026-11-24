@@ -184,7 +184,8 @@ export default {
       return mixed(bySells(this.ly.products)).slice(0, 5);
     },
     counterText() {
-      return this.f.pickupNote || [shortAddress(this.f), openWords(this.f)].filter(Boolean).join(". ") || t("ly.rd.counterP", "Every piece is baked and packed at the counter.");
+      /* the shop's own place and hours (a pickup point's note is about the point, not the shop) */
+      return [shortAddress(this.f), openWords(this.f)].filter(Boolean).join(". ") || t("ly.rd.counterP", "Every piece is baked and packed at the counter.");
     },
     /* The collection with the most sold pieces, in its photo. */
     photoCat() {

@@ -143,6 +143,8 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .tf-keys li::marker { color: var(--ly-act-text); }
 .tf-keys b { font-weight: 750; }
 .tf-article { padding-inline: 12px; margin-bottom: 12px; font-size: 15.5px; line-height: 1.65; }
+/* in its accordion the article starts under the title (the base set it off with a 60px gap and a rule) */
+.ly .tf-acc .tf-article { margin: 0 0 12px; padding-top: 0; border-top: 0; color: var(--ly-ink); }
 .tf-article p { margin-bottom: 10px; }
 .tf-acc-p { padding-inline: 12px; margin-bottom: 8px; }
 .tf-spec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 4px 12px 8px; }
@@ -154,6 +156,7 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .tf-spec-g dd { overflow-wrap: anywhere; }
 .tf-rev-in { padding: 0 12px 8px; }
 .ly .tf-details .pros { padding-inline: 12px; }
+.ly .tf-details .pros > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .tf-similar { margin-top: 26px; background: var(--ly-band); }
 @media (max-width: 900px) {
   .tf-gal { grid-template-columns: 54px minmax(0, 1fr); }
@@ -281,3 +284,33 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .k-sheet .k-addr__locate { border-radius: var(--tf-pill) !important; }
 /* the journal's search: a pill like every field of the design */
 .ly .bl-s { border-radius: var(--tf-pill); background: var(--ly-paper); }
+
+/* About: the collections three to a row; a count that leaves one alone (10: 3+3+3+1) goes four to a row (4+4+2) */
+@media (min-width: 980px) { .ly .acg:has(> :last-child:nth-child(3n + 1)) { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+/* compare on a tablet held sideways and a small laptop (980–1300px): the three toys and the add slot fit beside the
+   labels (244px columns ran 1152px into a 934px page at 1024, the add slot cut off at the edge) */
+@media (min-width: 980px) and (max-width: 1300px) {
+  .ly .cmp-row { grid-template-columns: minmax(var(--ly-lab-min), var(--ly-lab)) repeat(var(--ly-n), minmax(170px, 1fr)); min-width: calc(var(--ly-lab-min) + var(--ly-n) * (170px + 14px)); }
+}
+
+/* the journal's posts (and "More from the journal"): no post alone in a row. Three to a row: a count that leaves one
+   alone (4, 7, 10) goes four to a row. Two to a row (761–979px): an odd count goes three to a row, unless that leaves
+   one alone too (7, 13), then the last post takes the row. */
+@media (min-width: 980px) { .ly .bgrid:has(> :last-child:nth-child(3n + 4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px 16px; } }
+@media (min-width: 761px) and (max-width: 979px) {
+  .ly .bgrid:has(> :last-child:nth-child(odd)):not(:has(> :last-child:nth-child(3n + 1))) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px 12px; }
+  .ly .bgrid:has(> :last-child:nth-child(6n + 7)) > :last-child { grid-column: 1 / -1; }
+}
+
+/* a tablet (621–979px): the bag, checkout, account and order pages keep their two columns, as the design's
+   commerce and account grids do down to 620px (the base stacked them below 980px) */
+@media (min-width: 621px) and (max-width: 979px) {
+  .ly .cart, .ly .co { grid-template-columns: minmax(0, 1.58fr) minmax(260px, 1fr); gap: 14px; }
+  .ly .cart-sum, .ly .co-sum { position: sticky; }
+  .ly .acc { grid-template-columns: minmax(200px, .41fr) minmax(0, 1fr); gap: 14px; }
+  .ly .acc-nav { position: sticky; }
+  .ly .acc-nav ul { display: grid; gap: 2px; }
+  .ly .od-g { grid-template-columns: minmax(0, 1fr) minmax(260px, .8fr); gap: 14px; }
+  .ly .od-g .chat { position: sticky; }
+}

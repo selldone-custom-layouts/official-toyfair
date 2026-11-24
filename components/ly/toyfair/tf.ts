@@ -40,7 +40,9 @@ export function pickupPoints(shop: any): any[] {
   const out: any[] = [];
   for (const w of deliveryWays(shop)) {
     if (!w.pickup) continue;
-    for (const p of w.pickups || []) if (p && !out.some((x) => x.id === p.id)) out.push({ ...p, _way: w });
+    /* Selldone's points carry no id: one point is its name and address */
+    const same = (a: any, b: any) => (a.id != null && b.id != null ? a.id === b.id : (a.name || "") === (b.name || "") && (a.address || "") === (b.address || ""));
+    for (const p of w.pickups || []) if (p && !out.some((x) => same(x, p))) out.push({ ...p, _way: w });
   }
   return out;
 }

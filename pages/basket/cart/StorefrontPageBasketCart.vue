@@ -111,6 +111,7 @@
                   <span v-if="dmWayNote(way)" class="mc-n">{{ dmWayNote(way) }}</span>
                 </label>
               </div>
+              <p v-if="nx_more_later" class="cdlv-n"><ly-icon name="pin" />{{ t("tf.co.doorAtCheckout", "Delivery to your door shows at checkout, once your address is in.") }}</p>
               <p class="cdlv-n"><ly-icon name="info" />{{ t("ly.co.windowLater", "The time window is chosen at checkout.") }}</p>
             </div>
           </div>
@@ -1373,6 +1374,10 @@ export default {
       function setBasketConfig() {
         this.PENDING_UPDATE = false;
         this.ly_inflight = (this.ly_inflight || 0) + 1;
+        /* (Toy Fair, 24 Nov 2026) every update is numbered: the answer to an older one that comes back after a newer
+           one left is dropped, or it put back the delivery it was sent with (pickup chosen, then the answer to the
+           email's update arrived last and the order went back to "no way", asking for a delivery address) */
+        const seq = (this.ly_seq = (this.ly_seq || 0) + 1);
 
         this.busy_save = true;
         //console.log("🧨 setBasketConfig");
@@ -1397,6 +1402,7 @@ export default {
                 );
                 return; // Update only on last function call to prevent jump back basket changes!
               }
+              if (seq !== this.ly_seq) return; // a newer update is on its way: its answer is the one to keep
               console.log("✅ Local cart updated.");
 
               // ➔ Update tax in basket (Only these items changed!)
