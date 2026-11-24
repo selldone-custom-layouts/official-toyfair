@@ -116,6 +116,9 @@ for (const W of WIDTHS) {
     await visible(".bag-btn").click();
     await page.waitForSelector("#drawer a.btn", { state: "visible", timeout: 20000 });
     await sleep(1200);
+    /* the drawer lists the basket's lines once the shop's server has answered the add (2-3.5 s on the live shop on
+       24 Nov 2026, the add button counts at once): wait up to 15 s for it rather than reading an empty drawer */
+    await page.waitForFunction(() => document.querySelectorAll("#drawer .dw-list > li").length > 0, null, { timeout: 15000, polling: 250 }).catch(() => {});
     const drawerLines = await page.evaluate(() => document.querySelectorAll("#drawer .dw-list > li").length);
     console.log(`  bag drawer open, ${drawerLines} line(s)`);
     if (!drawerLines) bad(W, "the drawer shows no line after adding a piece");
