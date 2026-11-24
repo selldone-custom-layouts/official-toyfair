@@ -10,7 +10,7 @@
 | Names | `manifest.json` and `selldone-layout.json` from the skin (`package` is permanent after the first upload; the `description` must be right on the FIRST upload, Selldone keeps it) |
 | Dev server | port **9178**, shop `toychi-KX4iQgu0` (`.env`); `npm run serve` (launch entry `toyfair-layout`) |
 | Skin | Lagoon, Coral, Bluebell, Amber (brand `lagoon`), DM Sans over DM Sans, radius 12 / 8 px, basket word "basket" |
-| Layout id | (after the first upload) |
+| Layout id | **53** |
 
 ## Home
 
@@ -49,3 +49,4 @@ The photos are the design set's own (Toychi Layout Mockups, `shared/art`: fair-p
 
 | Version | Date | Layout | Deploy | What |
 | --- | --- | --- | --- | --- |
+| 1.0.0 | 2026-11-24 | 53 | 810 | First release: the superstore header and footer, the ten home sections, the listing with the Filters drawer, the product page with the sticky buy box and accordions, the commerce flows in Toy Fair dress, the retail service pages from live settings, toy words and line art in English and Arabic. PROD-CHECK OK through toyfair.selldone.shop (no Layout pinned yet: the default storefront in its loader pointed at the build); 272 files; server copy verified (extracting false, error null, js and css match). Not pinned yet. |
