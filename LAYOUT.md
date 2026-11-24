@@ -42,7 +42,7 @@ The photos are the design set's own (Toychi Layout Mockups, `shared/art`: fair-p
 ## Checks
 
 <!-- CHECKS:START -->
-(none yet)
+The fast runner (`new-shop-kits/fast-checks`, config `scripts/fast-checks.config.mjs`) on https://toyfair.selldone.shop, 24 Nov 2026: on 1.0.2 every check type 0 (ring, card-edge, corner, circle, contrast for every palette and the custom colours in light and dark, cart, currency, box, i18n with forced Arabic, text-col, underline, variant) but shape 80, all on the compare page (its sticky heads and label column inside the white panel added in 1.0.2; the panel is gone in 1.0.3). The guest checkout walk (`scripts/checkout-walk.mjs`: the address first, then the Toychi courier, Place order opens Selldone's payment window with cash on delivery, nothing ordered): WALK OK at 1440 and 390. Test inputs: product 741339 and 741344, category /cars-trains-vehicles-category, search "rover", article /blog/build-a-town-from-blocks-36427, compare p741339_p741344_p741313.
 <!-- CHECKS:END -->
 
 ## Releases
