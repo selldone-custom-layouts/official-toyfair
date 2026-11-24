@@ -30,7 +30,7 @@
           </div>
           <div class="md-body">
             <div :data-step="step === 'code' ? 2 : 1" class="lg">
-              <div aria-hidden="true" class="lg-wm ly-wm"><span class="wm-name">{{ shopWord }}</span><span v-if="shopCity" class="wm-sub">{{ shopCity }}</span></div>
+              <div aria-hidden="true" class="lg-wm ly-wm tf-lg-wm"><span class="tf-glyph"><svg class="i" viewBox="0 0 24 24"><path d="M12 2l2.7 7.3L22 12l-7.3 2.7L12 22l-2.7-7.3L2 12l7.3-2.7L12 2Z" /></svg></span><span class="wm-name">{{ shopWord }}<i v-if="wmDot" class="wm-dot"></i></span><span v-if="shopCity" class="wm-sub">{{ shopCity }}</span></div>
 
               <template v-if="step !== 'done'">
                 <p class="lg-p">{{ t("ly.lg.why", "Sign in to see your orders and saved addresses.") }}</p>
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import { wordmarkDot, wordmarkWord } from "../../ly/ly-wordmark";
 import { throttle } from "lodash-es";
 import SShopLogin from "@selldone/components-vue/storefront/login/SShopLogin.vue";
 import { EventBus } from "@selldone/components-vue/utils/events/EventBus.ts";
@@ -162,8 +163,11 @@ export default {
       return isRtl();
     },
     shopWord() {
-      const w = String(this.shop?.title || "").trim();
-      return w.charAt(0).toUpperCase() + w.slice(1);
+      /* Toy Fair: the skin's wordmark (case and dot), as in the header */
+      return wordmarkWord(String(this.shop?.title || "").trim());
+    },
+    wmDot() {
+      return wordmarkDot;
     },
     shopCity() {
       try {

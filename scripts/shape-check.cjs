@@ -26,7 +26,14 @@ const PAGES = (process.env.PAGES || "home=/,category=/croissants-category,produc
   });
 const WIDTHS = (process.env.WIDTHS || "1440,1100,390").split(",").map(Number);
 const VERBOSE = !!process.env.V;
-const SCALE = [8, 4];
+/* the skin's shape: panel, inner (skins/<name>/skin.json; was a fixed [8, 4], the first Layout's; same fix as Rino) */
+const SCALE = (() => {
+  const fs_ = require("fs");
+  const path_ = require("path");
+  const dir = path_.join(__dirname, "../skins");
+  const sk = JSON.parse(fs_.readFileSync(path_.join(dir, fs_.readdirSync(dir).find((d) => fs_.existsSync(path_.join(dir, d, "skin.json"))), "skin.json"), "utf8"));
+  return [sk.shape.panel, sk.shape.inner];
+})();
 
 /* runs in the page: every edge on the scale; nothing past the window */
 function audit(SCALE) {

@@ -3,8 +3,9 @@
  * (Galio's galio-checkout-walk.mjs with the Layout's markup.)
  *
  * For each width (1440 desktop, 390 phone), in a fresh browser (so a fresh guest basket):
- *   home → one piece in the bag (Today's selection's first "Add to bag") → the bag drawer → Checkout →
- *   contact (fake) → every delivery way the shop offers, one after the other (and a window when the way
+ *   home → one piece in the bag (the featured band's first card "Add") → the bag drawer → Checkout →
+ *   contact (fake) → (a shop that shows no way before an address, a local delivery's distance: the address
+ *   sheet first) → every delivery way the shop offers, one after the other (and a window when the way
  *   has windows) → the delivery sheet ("Compare the options") → the address sheet as the shop has it
  *   (map on: a pin, then the details; map off: the form), fake details, Save → for each way: "Place order",
  *   which only opens Selldone's payment window → a screenshot → the window's ✕. At the end the bag is
@@ -82,11 +83,13 @@ for (const W of WIDTHS) {
     // ── home and one piece in the bag
     await page.goto(BASE + "/", { waitUntil: "domcontentloaded", timeout: 120000 });
     await page.waitForSelector(".ly .ftr", { timeout: 90000 });
-    await page.waitForSelector(".ly .srow .add", { timeout: 60000 });
+    /* Toy Fair: the featured band's first card ("Add") */
+    const ADD = ".ly .tf-shelf .tf-buy button.add";
+    await page.waitForSelector(ADD, { timeout: 60000 });
     await sleep(2500);
-    const addBtn = page.locator(".ly .srow .add").first();
+    const addBtn = page.locator(ADD).first();
     await addBtn.scrollIntoViewIfNeeded();
-    const piece = await page.evaluate(() => document.querySelector(".ly .srow")?.querySelector(".s-t")?.textContent?.trim());
+    const piece = await page.evaluate(() => document.querySelector(".ly .tf-shelf .pc")?.querySelector(".pc-t")?.textContent?.trim());
     await addBtn.click();
     console.log(`  added one piece: ${piece || "(first row)"}`);
     await sleep(3500);
@@ -99,7 +102,7 @@ for (const W of WIDTHS) {
     console.log(`  bag drawer open, ${drawerLines} line(s)`);
     if (!drawerLines) bad(W, "the drawer shows no line after adding a piece");
     await shot("01-drawer");
-    await page.locator("#drawer a.btn").first().click();
+    await page.locator("#drawer a.btn").first().click(); /* Toy Fair: Checkout is the drawer's first button */
     await page.waitForSelector("#co-details", { timeout: 45000 });
     await sleep(3500);
     console.log(`  checkout: ${await page.evaluate(() => location.pathname + location.search)}`);
@@ -120,10 +123,71 @@ for (const W of WIDTHS) {
     }
     await sleep(2500);
 
-    // ── every delivery way
-    const list = await page.evaluate(() =>
-      [...document.querySelectorAll("#co-delivery .mcs label.mc")].map((b) => [b.querySelector(".mc-t"), b.querySelector(".mc-f"), b.querySelector(".mc-n")].map((x) => x?.textContent?.trim() || "").join(" | ")),
-    );
+    // ── the address sheet as the shop has it (map on: a pin at the map's centre, then the details; map off: the form)
+    const addressSheet = async () => {
+      const addrBtn = page.locator("#co-address .addr-add, #co-address .addr-card .qlink").first();
+      if (!(await addrBtn.count())) {
+        bad(W, "no address card to open");
+        return false;
+      }
+      await addrBtn.scrollIntoViewIfNeeded();
+      await addrBtn.click();
+      await page.waitForSelector(".k-addr__grid", { timeout: 20000 });
+      await sleep(4000);
+      const hasMap = await page.evaluate(() => !!document.querySelector(".k-addr__map"));
+      console.log(`  address sheet open, map ${hasMap ? "on" : "off"} (the shop's option)`);
+      await shot(`05-address-map-${hasMap ? "on" : "off"}`);
+      if (hasMap) {
+        await page.locator(".k-addr__pin svg").click().catch(() => {});
+        await sleep(5000);
+        const found = await page.evaluate(() => document.querySelector(".k-addr__found b")?.textContent?.trim());
+        console.log(`  pin placed; address under it: ${found}`);
+        if (await page.evaluate(() => !!document.querySelector(".k-addr__grid.-step-map"))) {
+          await page.locator(".k-sheet__foot .k-sheet__go").click();
+          await sleep(1500);
+        }
+      }
+      const fill = async (sel, v, force = false) => {
+        const el = page.locator(sel).first();
+        if (!(await el.count())) return;
+        if (force || !(await el.inputValue())) await el.fill(v);
+      };
+      await fill('.k-addr__field input[autocomplete="street-address"]', "12 Walk Street");
+      await fill('.k-addr__field input[placeholder="No."]', "12");
+      await fill('.k-addr__field input[autocomplete="name"]', "Test Walk", true);
+      await fill('.k-addr__field input[autocomplete="tel"]', "+1 415 555 0199", true);
+      await fill('.k-addr__field input[autocomplete="address-level2"]', "Walk City");
+      await fill('.k-addr__field input[autocomplete="postal-code"]', "94105");
+      await fill(".k-addr__field textarea", "Ring twice (test walk)", true);
+      await sleep(800);
+      await shot("06-address-details");
+      await page.locator(".k-sheet__foot .k-sheet__go").click();
+      await sleep(5000);
+      const left = await page.evaluate(() => !!document.querySelector(".k-addr__grid"));
+      const missing = await page.evaluate(() => document.querySelector(".k-addr__missing")?.textContent?.trim());
+      if (left) bad(W, `the address sheet stayed open after Save${missing ? ": " + missing : ""}`);
+      const set = await page.evaluate(() => (document.querySelector("#co-address .addr-card")?.textContent || "(no address card)").replace(/\s+/g, " ").trim());
+      console.log(`  address saved: ${set}`);
+      await shot("07-address-set", true);
+      return !left;
+    };
+
+    // ── every delivery way (a shop whose only ways depend on the address, a local delivery's distance, shows
+    //    them once the address is in: then the address comes first)
+    const listWays = () =>
+      page.evaluate(() =>
+        [...document.querySelectorAll("#co-delivery .mcs label.mc")].map((b) => [b.querySelector(".mc-t"), b.querySelector(".mc-f"), b.querySelector(".mc-n")].map((x) => x?.textContent?.trim() || "").join(" | ")),
+      );
+    let list = await listWays();
+    let addressDone = false;
+    if (!list.length) {
+      const none = await page.evaluate(() => document.querySelector("#co-delivery .ly-ship-none")?.textContent?.trim());
+      console.log(`  no way before an address; the Delivery card says: ${none || "(nothing)"}`);
+      if (!none) bad(W, "the Delivery card shows no way and says nothing about it");
+      addressDone = await addressSheet();
+      await sleep(3000);
+      list = await listWays();
+    }
     console.log(`  delivery ways (${list.length}):`);
     list.forEach((w, i) => console.log(`    ${i + 1}. ${w}`));
     if (!list.length) bad(W, "the Delivery card shows no way");
@@ -179,7 +243,9 @@ for (const W of WIDTHS) {
 
     // ── a way that needs an address, then the address sheet
     const home = wayInfo.find((w) => !w.pickup);
-    if (home) {
+    if (addressDone) {
+      /* the address is in already (it came first) */
+    } else if (home) {
       await ways().nth(home.i).click();
       await sleep(3000);
       const firstChip = page.locator("#co-delivery .wins .wchip:not([disabled])").first();
@@ -187,46 +253,7 @@ for (const W of WIDTHS) {
         await firstChip.click();
         await sleep(2000);
       }
-      const addrBtn = page.locator("#co-address .addr-add, #co-address .addr-card .qlink").first();
-      await addrBtn.scrollIntoViewIfNeeded();
-      await addrBtn.click();
-      await page.waitForSelector(".k-addr__grid", { timeout: 20000 });
-      await sleep(4000);
-      const hasMap = await page.evaluate(() => !!document.querySelector(".k-addr__map"));
-      console.log(`  address sheet open, map ${hasMap ? "on" : "off"} (the shop's option)`);
-      await shot(`05-address-map-${hasMap ? "on" : "off"}`);
-      if (hasMap) {
-        await page.locator(".k-addr__pin svg").click().catch(() => {});
-        await sleep(5000);
-        const found = await page.evaluate(() => document.querySelector(".k-addr__found b")?.textContent?.trim());
-        console.log(`  pin placed; address under it: ${found}`);
-        if (await page.evaluate(() => !!document.querySelector(".k-addr__grid.-step-map"))) {
-          await page.locator(".k-sheet__foot .k-sheet__go").click();
-          await sleep(1500);
-        }
-      }
-      const fill = async (sel, v, force = false) => {
-        const el = page.locator(sel).first();
-        if (!(await el.count())) return;
-        if (force || !(await el.inputValue())) await el.fill(v);
-      };
-      await fill('.k-addr__field input[autocomplete="street-address"]', "12 Walk Street");
-      await fill('.k-addr__field input[placeholder="No."]', "12");
-      await fill('.k-addr__field input[autocomplete="name"]', "Test Walk", true);
-      await fill('.k-addr__field input[autocomplete="tel"]', "+1 415 555 0199", true);
-      await fill('.k-addr__field input[autocomplete="address-level2"]', "San Francisco");
-      await fill('.k-addr__field input[autocomplete="postal-code"]', "94105");
-      await fill(".k-addr__field textarea", "Ring twice (test walk)", true);
-      await sleep(800);
-      await shot("06-address-details");
-      await page.locator(".k-sheet__foot .k-sheet__go").click();
-      await sleep(5000);
-      const left = await page.evaluate(() => !!document.querySelector(".k-addr__grid"));
-      const missing = await page.evaluate(() => document.querySelector(".k-addr__missing")?.textContent?.trim());
-      if (left) bad(W, `the address sheet stayed open after Save${missing ? ": " + missing : ""}`);
-      const set = await page.evaluate(() => (document.querySelector("#co-address .addr-card")?.textContent || "(no address card)").replace(/\s+/g, " ").trim());
-      console.log(`  address saved: ${set}`);
-      await shot("07-address-set", true);
+      await addressSheet();
     } else bad(W, "no way that needs an address");
 
     // ── each way: Place order → the payment window → its ✕

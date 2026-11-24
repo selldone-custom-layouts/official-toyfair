@@ -124,6 +124,14 @@
         <span class="mc-n">{{ pickup.message || MapHelper.GenerateFullAddressFromMapInfo(pickup) }}</span>
       </label>
     </div>
+    <!-- No way yet: the shop's ways depend on the address (a local delivery's distance), or none reaches it -->
+    <p v-else class="ly-ship-none">
+      <ly-icon name="pin" /><span>{{
+        receiver_info && is_valid_location
+          ? t("ly.co.noWayHere", "No delivery way reaches this address yet. Try another address, or write to the shop.")
+          : t("ly.co.noWayYet", "Add the delivery address to see how your order can reach you.")
+      }}</span>
+    </p>
 
     <template v-if="transportation">
       <div v-if="windowsOn && timeItems.length && !dmShipSheet" class="wins">

@@ -362,3 +362,17 @@
 .ly-layers .tf-menu-rg .pn-rg-v { white-space: nowrap; font-size: 13px; }
 .ly .tf-dd-list .dd-tx b { font-family: var(--ly-sans); font-weight: 750; font-size: 14px; line-height: 1.25; letter-spacing: 0; }
 .ly .tf-dd-list .dd-tx small { font-size: 12.5px; color: var(--ly-muted); }
+
+/* the Theme row on the brand-coloured footer: white words and rings (the kit's muted ink read 4.2:1 there) */
+.tf-ftr .dts-row { --ts-ink: #fff; --ts-muted: #fff; --ts-line: rgb(255 255 255 / 45%); --ts-ring: #fff; color: #fff; }
+.tf-ftr .dts-row :is(.ts-row__label, .ts-row__name, .ts-pal__note, .ts-mode__btn) { color: #fff; }
+.tf-ftr .dts-row .ts-mode__btn[aria-pressed="true"], .tf-ftr .dts-row .ts-mode__btn.-on { color: var(--ly-ink); }
+.tf-ftr .ly-gdpr, .tf-ftr .ly-gdpr *, .tf-ftr .ly-made, .tf-ftr .ly-made * { color: #fff !important; }
+/* the search button: a round button inside the bar (no square corner beside the round field) */
+.ly .tf-sgo { width: 37px; height: 37px; margin: 4px; margin-inline-start: 0; border-radius: 50%; align-self: center; }
+.ly .tf-sgo:focus-visible { box-shadow: inset 0 0 0 2px var(--ly-ring), inset 0 0 0 4px var(--ly-ring-in); }
+.tf-lead-srch .tf-sgo { width: 38px; height: 38px; }
+.ly .ftr.tf-ftr { --ly-dark-muted: #fff; --ly-dark-line-2: rgb(255 255 255 / 45%); }
+.ly .tf-ftr .dts-in .ts-row__label { text-transform: none; letter-spacing: 0; font-size: 15px; font-weight: 800; color: #fff; }
+.ly .tf-ftr .dts-in .ts-row__name { color: #fff; font-size: 13.5px; font-weight: 650; }
+.ly .tf-ftr .dts-in .ts-mode .ts-mode__btn { text-transform: none; letter-spacing: 0; font-size: 13.5px; font-weight: 750; }

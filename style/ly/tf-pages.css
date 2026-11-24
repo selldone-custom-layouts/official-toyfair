@@ -214,3 +214,57 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .ly .cr-n { font-family: var(--ly-sans); font-weight: 800; font-size: 19px; letter-spacing: -.02em; }
 /* Selldone's discount code button in sentence case */
 .ly .ly-code .v-btn, .ly .ly-code button { text-transform: none !important; letter-spacing: 0 !important; font-weight: 750; }
+
+/* ━━━━ The design's panels everywhere: white with a 1px line (the base tinted them); compare, account, orders,
+   addresses, the order page and its messages, contact, FAQ, the journal's boxes ━━━━ */
+.ly :is(.empty.boxed, .es, .crit, .ch, .cmp-share, .od-tl, .od-c, .chat, .acc-nav, .oc, .tile, .ol-a, .prof, .ab, .ab-form, .bf, .bl-s, .bc, .ap, .acc-c, .ci-c, .ct-f, .faq-ct, .qa, .toc-d, .revs .empty, .ab-empty .empty, .cmts .empty) {
+  background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line);
+}
+.ly .an { border-radius: var(--ly-r-in); font-weight: 650; }
+.ly .an.on { background: var(--ly-tint2); color: var(--ly-ink); box-shadow: none; font-weight: 750; }
+.ly .an.on .il-ic { color: var(--ly-act-text); }
+.ly :is(.oc-t, .od-c .co-h, .ab h2, .acc-main h2) { font-weight: 850; letter-spacing: -.03em; }
+.ly .oc-tot b { font-family: var(--ly-sans); font-weight: 850; }
+/* the order's progress: small dots on a line (the design's "Order status") */
+.ly .t-ic { width: 34px; height: 34px; }
+.ly .t + .t::before { top: 16px; inset-inline-end: calc(50% + 24px); width: calc(100% - 48px); }
+.ly .t-ic .i { width: 17px; height: 17px; }
+
+/* ━━━━ The checkout steps: the design's dots and lines (✓ Basket ——— ② Delivery ——— ③ Payment) ━━━━ */
+.ly .steps { display: flex; flex-wrap: nowrap; align-items: center; justify-content: flex-start; gap: 0; margin-top: 16px; max-width: 760px; }
+.ly .steps .step { flex: 0 0 auto; display: flex; align-items: center; gap: 0; min-height: 36px; padding: 0; background: none !important; box-shadow: none !important; border-radius: 0; color: var(--ly-muted); font-weight: 750; font-size: 15px; letter-spacing: 0; text-transform: none; }
+.ly .steps .step:not(:last-child) { flex: 1 1 auto; }
+.ly .steps .step:not(:last-child)::after { content: ""; flex: 1 1 auto; min-width: 20px; height: 2px; margin-inline: 12px; border-radius: 2px; background: var(--ly-line-2); }
+.ly .steps .step.done:not(:last-child)::after { background: var(--ly-act); }
+.ly .steps .step > a { display: inline-flex; align-items: center; gap: 9px; color: inherit; border-radius: var(--tf-pill); padding-inline-end: 4px; white-space: nowrap; }
+.ly .steps .st-ic { width: 28px; height: 28px; background: var(--ly-paper); color: var(--ly-muted); box-shadow: inset 0 0 0 1.5px var(--ly-line-2); }
+.ly .steps .st-ic .i { width: 14px; height: 14px; }
+.ly .steps .step.done { color: var(--ly-ink); }
+.ly .steps .step.done .st-ic { background: var(--ly-act); color: var(--ly-act-on); box-shadow: none; }
+.ly .steps .step.cur { color: var(--ly-ink); }
+.ly .steps .step.cur .st-ic { background: var(--ly-paper); color: var(--ly-act-text); box-shadow: inset 0 0 0 2px var(--ly-act); }
+@media (max-width: 600px) {
+  .ly .steps .step:not(.cur) > a > span:last-child { display: none; }
+  .ly .steps .step:not(:last-child)::after { margin-inline: 8px; min-width: 12px; }
+  .ly .steps .step { font-size: 14px; }
+}
+
+/* ━━━━ Compare: the design's side-by-side in white panels ━━━━ */
+.ly .cmp-share { border-radius: var(--ly-r-pn); }
+
+/* the sign-in sheet's wordmark: the header's (glyph, lower case, heavy, the dot) */
+.tf-lg-wm { display: flex !important; align-items: center; justify-content: center; gap: 9px; }
+.tf-lg-wm .tf-glyph { width: 36px; height: 36px; background: var(--ly-tint2); color: var(--ly-act-text); }
+.tf-lg-wm .tf-glyph .i { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+.tf-lg-wm .wm-name { font-family: var(--ly-sans) !important; font-weight: 850 !important; letter-spacing: -.075em !important; font-size: 36px !important; line-height: .95; font-style: normal !important; }
+.tf-lg-wm .wm-dot { background: var(--ly-act); }
+/* Selldone's discount code control in sentence case */
+.ly .ly-code, .ly .ly-code * { text-transform: none !important; letter-spacing: 0 !important; }
+/* no delivery way before an address: say what to do */
+.ly .ly-ship-none { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 0; padding: 12px 14px; border-radius: var(--ly-r-in); background: var(--ly-band); color: var(--ly-ink); font-size: 14px; line-height: 1.45; }
+.ly .ly-ship-none .i { width: 18px; height: 18px; flex: none; margin-top: 1px; color: var(--ly-act-text); }
+
+/* the article: the cover under the title (the base's overlap needed its tall tinted band) */
+.ly .pt.art-pt { padding-bottom: 22px; }
+.ly .art-cov { margin: 6px auto 0; }
+@media (max-width: 760px) { .ly .art-cov { margin-top: 4px; } }
