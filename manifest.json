@@ -3,7 +3,7 @@
   "deploy_path": "",
   "package": "toy-fair-superstore",
   "name": "Toy Fair Superstore",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "storefront": true,
   "backoffice": false,
   "description": "A bright, busy toy superstore Layout in the manner of a big family retailer. A dark top strip, a brand-coloured header with account and order tracking links, a wide search bar, saved toys and the basket, a row of department links with a Departments menu and a gift finder, and a strip of delivery, pickup and help links. The home: a soft panel hero with big words beside a playroom photo, featured toys on the family-dark band, departments as picture tiles from the shop's own category images, shelves of toys, two photo promos, shop by age and by budget from the products' real specification and prices, play guides from the shop's blog and help links. A department page with a title panel, department chips, a filter drawer built from the toys' real specification and a four-column grid; a product page with side thumbnails, a sticky buy box with delivery and pickup choices read from the shop's own settings, key features, details and the specification in the shop's own groups; compare side by side; a basket drawer and the whole checkout; retail service pages (gift finder, pickup points, order tracking, help centre, delivery, pickup, returns, stock, pre-orders, gift cards, payment options, product notices) built from the shop's live delivery, pickup and payment settings, with an honest empty state where the shop has none. One colour family from the chosen palette (Lagoon by default; Coral, Bluebell, Amber or any colour), light by default with a dark mode, DM Sans throughout, 12 px panels and pill buttons. English and Arabic."

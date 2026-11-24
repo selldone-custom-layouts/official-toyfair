@@ -385,3 +385,6 @@
 /* the hero photo: an inner-radius box set into the panel (no square corner beside the panel's round ones) */
 .ly .tf-hero-art { margin: 8px; margin-inline-start: 0; border-radius: var(--ly-r-in); }
 @media (max-width: 600px) { .ly .tf-hero-art { margin: 8px 8px 0; } }
+
+/* the wordmark keeps its own direction in Arabic (a Latin name stays "toychi." with the dot after it) */
+.ly-wm .wm-name { unicode-bidi: plaintext; }
