@@ -130,20 +130,21 @@ export default {
     shape: path.join(ROOT, "scripts/shape-check.cjs"),
     underline: path.join(ROOT, "scripts/underline-check.cjs"),
   },
-  box: { mega: "[aria-controls=dd-shop]", quick: ".pc-qv", category: CAT },
+  box: { mega: "[aria-controls=dd-shop]", quick: ".tf-qv", category: CAT },
   shape: {
     states(label, w) {
       const s = [];
       if (w < 980) s.push(["menu", ".menu-btn"]);
       else {
         s.push(["shop-menu", "[aria-controls=dd-shop]"]);
-        s.push(["region", ".rg-pill"]);
+        s.push(["region", ".tf-region"]);
       }
-      s.push(["search", "[aria-controls=srch]"]);
+      s.push(["search", "#tf-q"]);
       if (label === "home" || label === "category") s.push(["bag", ".bag-btn"]);
       if (label === "category") {
-        if (w < 1200) s.push(["filter-sheet", ".fbtn"]);
-        s.push(["quick", ".pc-qv"]);
+        /* Toy Fair: the filters are a drawer at every width */
+        s.push(["filter-sheet", ".fbtn"]);
+        s.push(["quick", ".tf-qv"]);
       }
       if (label === "account") s.push(["signin", "@signin"]);
       return s;
