@@ -281,3 +281,5 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .k-sheet .k-sheet__head h2 { font-weight: 850 !important; letter-spacing: -.035em !important; }
 .k-sheet .k-addr__eyebrow { letter-spacing: .1em; }
 .k-sheet .k-addr__locate { border-radius: var(--tf-pill) !important; }
+/* the journal's search: a pill like every field of the design */
+.ly .bl-s { border-radius: var(--tf-pill); background: var(--ly-paper); }
