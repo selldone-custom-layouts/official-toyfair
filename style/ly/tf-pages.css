@@ -268,3 +268,5 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 .ly .pt.art-pt { padding-bottom: 22px; }
 .ly .art-cov { margin: 6px auto 0; }
 @media (max-width: 760px) { .ly .art-cov { margin-top: 4px; } }
+/* compare: the label column keeps "Comparing" and the count; the products carry their own departments */
+.ly .cmp-row.hd .cl.lab .cl-t { display: none; }

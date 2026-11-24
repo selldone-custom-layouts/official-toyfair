@@ -124,7 +124,10 @@ export default {
       return this.$store.getters.getShop;
     },
     gateway() {
-      return shopFacts(this.shop).gateway?.name || "";
+      /* cash on delivery in the Layout's words (the gateway's name is the shop's English) */
+      const g = shopFacts(this.shop).gateway;
+      if (!g) return "";
+      return g.cod ? t("tf.bag.cod", "Cash on delivery") : g.name || "";
     },
     basket() {
       return this.getBaskets().find((b) => b?.type === "PHYSICAL") || this.getBaskets().find((b) => b?.items?.length) || null;

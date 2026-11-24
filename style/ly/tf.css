@@ -376,3 +376,8 @@
 .ly .tf-ftr .dts-in .ts-row__label { text-transform: none; letter-spacing: 0; font-size: 15px; font-weight: 800; color: #fff; }
 .ly .tf-ftr .dts-in .ts-row__name { color: #fff; font-size: 13.5px; font-weight: 650; }
 .ly .tf-ftr .dts-in .ts-mode .ts-mode__btn { text-transform: none; letter-spacing: 0; font-size: 13.5px; font-weight: 750; }
+
+/* shapes on the 12 / 8 scale only: the card's photo plate and the promo photos are inner-radius boxes set in */
+.ly .tf-card .tf-ph { margin: 4px 4px 0; border-radius: var(--ly-r-in); }
+.tf-promo-ph { margin: 6px 6px 0; border-radius: var(--ly-r-in); }
+.tf-promo-grid .tf-promo:last-child .tf-promo-ph { aspect-ratio: 1.47; }

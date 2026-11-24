@@ -46,7 +46,7 @@
     "search": "rover",
     "article": "/blog/build-a-town-from-blocks-36427",
     "compare": "p741339_p741344_p741313",
-    "i18nIgnore": "",
+    "i18nIgnore": "Product details|Cash on delivery",
     "mega": "[aria-controls=dd-shop]",
     "megaPanel": "#dd-shop",
     "filterBtn": ".fbtn",
@@ -885,7 +885,8 @@
       "tf.pd.similar": "ألعاب مشابهة",
       "tf.pd.viewDept": "عرض القسم",
       "ly.co.noWayHere": "لا تصل أي طريقة توصيل إلى هذا العنوان بعد. جرّب عنوانًا آخر، أو راسل المتجر.",
-      "ly.co.noWayYet": "أضف عنوان التوصيل لترى كيف يمكن أن يصلك طلبك."
+      "ly.co.noWayYet": "أضف عنوان التوصيل لترى كيف يمكن أن يصلك طلبك.",
+      "tf.bag.cod": "الدفع عند الاستلام"
     }
   }
 }
