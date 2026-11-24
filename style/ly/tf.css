@@ -381,3 +381,7 @@
 .ly .tf-card .tf-ph { margin: 4px 4px 0; border-radius: var(--ly-r-in); }
 .tf-promo-ph { margin: 6px 6px 0; border-radius: var(--ly-r-in); }
 .tf-promo-grid .tf-promo:last-child .tf-promo-ph { aspect-ratio: 1.47; }
+
+/* the hero photo: an inner-radius box set into the panel (no square corner beside the panel's round ones) */
+.ly .tf-hero-art { margin: 8px; margin-inline-start: 0; border-radius: var(--ly-r-in); }
+@media (max-width: 600px) { .ly .tf-hero-art { margin: 8px 8px 0; } }

@@ -217,7 +217,7 @@ html:has(.tf-buybox) .v-application { overflow: clip; }
 
 /* ━━━━ The design's panels everywhere: white with a 1px line (the base tinted them); compare, account, orders,
    addresses, the order page and its messages, contact, FAQ, the journal's boxes ━━━━ */
-.ly :is(.empty.boxed, .es, .crit, .ch, .cmp-share, .od-tl, .od-c, .chat, .acc-nav, .oc, .tile, .ol-a, .prof, .ab, .ab-form, .bf, .bl-s, .bc, .ap, .acc-c, .ci-c, .ct-f, .faq-ct, .qa, .toc-d, .revs .empty, .ab-empty .empty, .cmts .empty) {
+.ly :is(.empty.boxed, .es, .crit, .ch, .cmp-share, .od-tl, .od-c, .chat, .acc-nav, .oc, .tile, .ol-a, .prof, .ab, .ab-form, .bf, .bc, .ap, .acc-c, .ci-c, .ct-f, .faq-ct, .qa, .toc-d, .revs .empty, .ab-empty .empty, .cmts .empty) {
   background: var(--ly-paper); box-shadow: inset 0 0 0 1px var(--ly-line);
 }
 .ly .an { border-radius: var(--ly-r-in); font-weight: 650; }
