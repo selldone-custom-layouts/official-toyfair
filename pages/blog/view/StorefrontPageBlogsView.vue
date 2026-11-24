@@ -136,7 +136,7 @@ import { ly, fmtDate, loadDm, money, priceView, productImage, productTo, shopFac
 import { plainText, shortAddress } from "@app-storefront/components/ly/read/rd";
 import { addCount, basketLine, mayBuy } from "@app-storefront/components/kalio/kalio-basket";
 import { dropSrcset, photoSrcset } from "@app-storefront/components/kalio/kalio-catalog";
-import { journalPage, journalPost, journalRoute, productsIn } from "@app-storefront/components/kalio/pages/kalio-journal";
+import { journalPage, journalPost, journalRoute, postRoute, productsIn } from "@app-storefront/components/kalio/pages/kalio-journal";
 import { currentCurrency } from "@app-storefront/components/region-switcher/region";
 import { t } from "@app-storefront/components/kalio/i18n/kalio-i18n";
 
@@ -258,9 +258,23 @@ export default {
       this.busy = true;
       this.article = null;
       this.more = [];
-      journalPost(asked)
+      /* The post's own address is /blog/<slug>-<blog id>. An address that starts with a number (/blog/<id>-<slug>, an
+         article id or a blog id) still opens the post: the number is tried as the blog id, then looked up among the
+         journal's posts as an article id; the address then becomes the post's own (same as Storybook). */
+      const lead = /^(\d+)(?:-|$)/.exec(String(asked || ""));
+      const num = lead ? lead[1] : asked;
+      journalPost(num)
+        .catch((err: any) => {
+          if (!lead) throw err;
+          return journalPage({ page: 1, limit: 60 }).then(({ articles }: any) => {
+            const hit = (articles || []).find((a: any) => String(a.id) === num || String(a.parent_id) === num);
+            if (!hit) throw err;
+            return journalPost(hit.parent_id || hit.id);
+          });
+        })
         .then((data: any) => {
           if (asked !== this.blogId) return;
+          if (lead && data?.article) this.$router.replace(postRoute(data.article)).catch(() => {});
           this.article = data.article;
           this.setPageTitle?.(data.article.title);
           StorefrontSeo.updateArticle(data.article, this.$store.getters.getShop, this.seoNavigation);
