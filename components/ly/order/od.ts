@@ -19,13 +19,14 @@ export function orderTone(basket: any): OrderTone {
   return "wait";
 }
 
-export function orderSteps(pickup = false) {
+/* `type` is the order's way (delivery_info.type): a truck or car order shows the truck on its "On the way" step */
+export function orderSteps(pickup = false, type = "") {
   return [
     { key: "placed", label: t("ly.od.stPlaced", "Placed"), icon: "check", codes: ["CheckQueue", "OrderConfirm"] },
     { key: "baking", label: t("ly.od.stBaking", "Baking"), icon: "gift", codes: ["PreparingOrder"] },
     pickup
       ? { key: "ready", label: t("ly.od.stReady", "Ready to collect"), icon: "store", codes: ["SentOrder"] }
-      : { key: "way", label: t("ly.od.stWay", "On the way"), icon: "bike", codes: ["SentOrder"] },
+      : { key: "way", label: t("ly.od.stWay", "On the way"), icon: type === "Truck" || type === "Car" ? "truck" : "bike", codes: ["SentOrder"] },
     pickup
       ? { key: "done", label: t("ly.od.stCollected", "Collected"), icon: "home", codes: ["ToCustomer"] }
       : { key: "done", label: t("ly.od.stDone", "Delivered"), icon: "home", codes: ["ToCustomer"] },

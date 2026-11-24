@@ -361,7 +361,8 @@ export default {
     wayIcon(w) {
       if (w.pickup) return "store";
       if (w.type === "Global" || w.type === "Post") return "plane";
-      if (w.type === "Motorbike" || w.type === "Car" || w.type === "Bicycle" || w.type === "Truck") return "bike";
+      if (w.type === "Truck" || w.type === "Car") return "truck";
+      if (w.type === "Motorbike" || w.type === "Bicycle") return "bike";
       return "check";
     },
     feeText(w) {

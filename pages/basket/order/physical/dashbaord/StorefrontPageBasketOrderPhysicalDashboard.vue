@@ -183,7 +183,7 @@ export default {
 
     // ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅ the Layout ▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅
     steps() {
-      return orderSteps(isPickupWay(this.basket?.delivery_info));
+      return orderSteps(isPickupWay(this.basket?.delivery_info), this.basket?.delivery_info?.type);
     },
     stepAt() {
       return orderStep(this.basket);

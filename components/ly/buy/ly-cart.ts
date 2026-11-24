@@ -37,6 +37,7 @@ export function shopWay(shop: any, way: any): any {
 export function wayIcon(type: string): string {
   if (type === ShopTransportations.Pickup.code) return "store";
   if (["Global", "Post", "Airplane", "Ship"].includes(type)) return "plane";
+  if (type === "Truck" || type === "Car") return "truck";
   return "bike";
 }
 

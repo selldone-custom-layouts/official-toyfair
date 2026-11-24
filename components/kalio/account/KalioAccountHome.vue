@@ -137,7 +137,7 @@ export default {
       return isPickupWay((this.detail || this.latest)?.delivery_info);
     },
     steps() {
-      return orderSteps(this.pickup);
+      return orderSteps(this.pickup, (this.detail || this.latest)?.delivery_info?.type);
     },
     stepAt() {
       return orderStep(this.detail || this.latest);

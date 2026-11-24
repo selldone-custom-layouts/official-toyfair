@@ -48,7 +48,7 @@
       <ly-ic-line v-if="methodLine" :icon="wayIcon(delivery_info?.type)" :text="reach || whenText || ''" :title="methodLine" />
       <ly-ic-line v-if="whenText && reach" :text="whenText" :title="t('ly.od.when', 'When')" icon="cal" />
       <li v-if="courier" class="il">
-        <span class="il-ic"><ly-icon name="bike" /></span>
+        <span class="il-ic"><ly-icon :name="wayIcon(delivery_info?.type) === 'truck' ? 'truck' : 'bike'" /></span>
         <div class="il-tx">
           <b>{{ courier.name }}</b><span>{{ t("ly.od.courier", "Courier") }}</span>
           <span v-if="courier.phone" class="ly-il-acts"

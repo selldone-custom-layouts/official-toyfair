@@ -93,7 +93,7 @@ export function deliveryLines(shop: any): DeliveryLine[] {
       const near = w.distance ? t("ly.pd.within", "Local delivery within {km} km of the bakery.", { km: w.distance }) : t("ly.pd.local", "Local delivery.");
       out.push({
         key: "way-" + w.id,
-        icon: "bike",
+        icon: w.type === "Truck" || w.type === "Car" ? "truck" : "bike",
         title: `${w.title} · ${priceWord(w.fee, w.free)}`,
         line: [near, w.windows.length ? w.windows.join(", ") + "." : ""].filter(Boolean).join(" "),
       });
